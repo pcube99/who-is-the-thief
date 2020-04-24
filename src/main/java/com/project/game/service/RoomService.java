@@ -22,6 +22,6 @@ public class RoomService {
     }
 
     public List<Room> test() {
-        return mongoTemplate.findAll(Room.class);
+        return mongoTemplate.findAll(Room.class) ;
     }
 }
