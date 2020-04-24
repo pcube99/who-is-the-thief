@@ -1,0 +1,18 @@
+#title {
+  font: 100 30px 'Oleo Script', Helvetica, sans-serif;
+  color: #2b2b2b;
+  text-shadow: 4px 4px 0px rgba(0,0,0,0.1);
+  margin-top: 15%;
+}
+
+#create {
+    width: 45%;
+    background-color: #34ad54;
+    margin: 5% 30%;
+}
+
+#join {
+    width: 45%;
+    background-color: #2a9ac7;
+    margin: 5% 30%;
+}
