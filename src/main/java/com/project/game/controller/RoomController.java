@@ -11,9 +11,11 @@ import java.util.List;
 /**
  * Created by havyapanchal on 24 Apr, 2020 , 7:16 PM
  */
+
 @RestController
 public class RoomController {
     private RoomService roomService ;
+
     @Autowired
     public RoomController(RoomService roomService) {
         this.roomService = roomService;
