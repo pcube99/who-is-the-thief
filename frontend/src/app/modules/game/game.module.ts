@@ -4,6 +4,8 @@ import { HomeComponent } from './home/home.component';
 import { LoaderComponent } from './loader/loader.component';
 import { CreateRoomComponent } from './create-room/create-room.component';
 import { JoinRoomComponent } from './join-room/join-room.component';
+import { ProfileComponent } from './profile/profile.component';
+import { ReactiveFormsModule ,FormsModule} from '@angular/forms';
 
 
 
@@ -12,14 +14,22 @@ import { JoinRoomComponent } from './join-room/join-room.component';
     HomeComponent,
     LoaderComponent,
     CreateRoomComponent,
-    JoinRoomComponent
+    JoinRoomComponent,
+    ProfileComponent,
+    
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   exports: [
     HomeComponent,
-    LoaderComponent
+    LoaderComponent,
+    CreateRoomComponent,
+    JoinRoomComponent,
+    ProfileComponent,
+    ReactiveFormsModule
   ]
 })
 export class GameModule { }

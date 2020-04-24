@@ -29,6 +29,7 @@
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/jquery-form-validator/form-validator/jquery.form-validator.min.js",
               "node_modules/materialize-css/dist/js/materialize.js"
 
             ]

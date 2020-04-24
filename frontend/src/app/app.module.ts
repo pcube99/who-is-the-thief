@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { GameModule } from './modules/game/game.module';
+import { ReactiveFormsModule ,FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -11,7 +12,9 @@ import { GameModule } from './modules/game/game.module';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    GameModule
+    GameModule,
+    ReactiveFormsModule ,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
