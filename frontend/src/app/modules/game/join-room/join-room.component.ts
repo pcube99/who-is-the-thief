@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 declare let $: any;
 @Component({
   selector: 'app-join-room',
@@ -14,8 +15,12 @@ export class JoinRoomComponent implements OnInit {
   profilePicNumber: any;
   joinRoomForm: FormGroup;
   userNameErrorMessage: any;
+  userName: any;
+  roomId: any;
+  baseUrl: any;
   constructor(private fb: FormBuilder,
-    private router: Router) { }
+    private router: Router,
+    private http: HttpClient) { }
 
   ngOnInit(): void {
     this.hideCarousel = false;
@@ -40,7 +45,7 @@ export class JoinRoomComponent implements OnInit {
   createForm() {
     this.joinRoomForm = this.fb.group({
       userName: new FormControl('', [Validators.required, Validators.minLength(3)]),
-      roomId: new FormControl('', [Validators.required, Validators.minLength(5)]),
+      roomId: new FormControl('', [Validators.required, Validators.minLength(4)]),
     });
   }
 
@@ -53,6 +58,16 @@ export class JoinRoomComponent implements OnInit {
     } else {
       return false;
     }
+  }
+
+  joinRoom() {
+    // http://54.87.54.255/rooms?room_code=635b&player_name=Jeet
+    console.log('this.userName' + this.userName + " this.roomId " + this.roomId);
+    this.baseUrl = "http://54.87.54.255/rooms?room_code="+ this.roomId + "&player_name=" + this.userName;
+    this.http.get( this.baseUrl).subscribe({
+    next: data => console.log(data),
+    error: error => console.error('There was an error!', error)
+  });
   }
 
 }
