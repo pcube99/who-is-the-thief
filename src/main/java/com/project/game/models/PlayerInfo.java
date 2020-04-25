@@ -14,8 +14,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PlayerInfo {
-    @JsonProperty("name")
+    @JsonProperty("player_name")
     private String name ;
     @JsonProperty("score")
     private Integer score ;
+    @JsonProperty("player_id")
+    private String playerId ;
 }
