@@ -20,16 +20,19 @@ public class RoomController {
         this.roomService = roomService;
     }
 
+    @CrossOrigin
     @GetMapping("/{room_code}")
     public ResponseEntity<Room> findRoom(@PathVariable("room_code") String roomCode) throws Exception {
         return roomService.findRoom(roomCode);
     }
 
+    @CrossOrigin
     @PostMapping
     public ResponseEntity<Room> createRoom(@RequestParam("room_name") String roomName, @RequestParam("rounds") Integer noOfRounds) throws Exception {
         return roomService.createRoom(roomName, noOfRounds);
     }
 
+    @CrossOrigin
     @GetMapping
     public ResponseEntity<Boolean> joinRoom(@RequestParam("room_code") String roomCode, @RequestParam("player_name") String playerName) throws Exception {
         return roomService.joinRoom(roomCode, playerName);
