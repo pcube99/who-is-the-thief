@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @Slf4j
-//TODO:  Add logs
 public class RoomService {
     private RoomDaoImpl roomDaoImpl;
 

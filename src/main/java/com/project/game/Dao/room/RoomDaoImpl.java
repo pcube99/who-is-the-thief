@@ -32,7 +32,6 @@ public class RoomDaoImpl implements RoomDao {
 
     @Override
     public ResponseEntity<Room> findRoom(String roomCode) throws Exception {
-        System.out.println("abcdefghijkl");
         log.info("Request received for room_code: {}", roomCode);
         Query query = new Query();
         query.addCriteria(Criteria.where(Constants.ROOM_CODE).is(roomCode));
@@ -53,6 +52,7 @@ public class RoomDaoImpl implements RoomDao {
 
     @Override
     public ResponseEntity<Room> createRoom(String roomName, Integer noOfRounds, String firstPlayerName) throws Exception {
+        log.info("Request received to create room with roomName: [{}] , noOfRounds : [{}] and firstPlayerName : [{}]",roomName,noOfRounds,firstPlayerName) ;
         String roomCode = UUID.randomUUID().toString().substring(0, 4);
         List<PlayerInfo> players = new ArrayList<>();
         players.add(PlayerInfo.builder().name(firstPlayerName).score(0).build());
@@ -60,7 +60,9 @@ public class RoomDaoImpl implements RoomDao {
         Room roomInDb = null;
         try {
             roomInDb = mongoTemplate.save(room);
+            log.info("Room saved in DB: {}", roomInDb);
         } catch (Exception e) {
+            log.info("mongodb save operation failed");
             throw new Exception("mongodb save operation failed");
         }
         return new ResponseEntity<>(roomInDb, HttpStatus.CREATED);
@@ -76,8 +78,10 @@ public class RoomDaoImpl implements RoomDao {
             Room roomInDb = null;
             try {
                 roomInDb = mongoTemplate.save(room);
+                log.info("Room updated in DB: {}", roomInDb);
             } catch (Exception e) {
-                throw new Exception("mongodb save operation failed");
+                log.info("mongodb update operation failed");
+                throw new Exception("mongodb update operation failed");
             }
             return new ResponseEntity<>(true, HttpStatus.OK);
         }
