@@ -26,9 +26,8 @@ public class RoomController {
     }
 
     @PostMapping
-    public ResponseEntity<Room> createRoom(@RequestParam("room_name") String roomName, @RequestParam("rounds") Integer noOfRounds,
-                                           @RequestParam("player_name") String playerName) throws Exception {
-        return roomService.createRoom(roomName, noOfRounds, playerName);
+    public ResponseEntity<Room> createRoom(@RequestParam("room_name") String roomName, @RequestParam("rounds") Integer noOfRounds) throws Exception {
+        return roomService.createRoom(roomName, noOfRounds);
     }
 
     @GetMapping

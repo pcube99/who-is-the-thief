@@ -24,8 +24,8 @@ public class RoomService {
         return roomDaoImpl.findRoom(roomCode);
     }
 
-    public ResponseEntity<Room> createRoom(String roomName, Integer noOfRounds, String firstPlayerName) throws Exception {
-        return roomDaoImpl.createRoom(roomName, noOfRounds, firstPlayerName);
+    public ResponseEntity<Room> createRoom(String roomName, Integer noOfRounds) throws Exception {
+        return roomDaoImpl.createRoom(roomName, noOfRounds);
     }
 
     public ResponseEntity<Boolean> joinRoom(String roomCode, String playerName) throws Exception {

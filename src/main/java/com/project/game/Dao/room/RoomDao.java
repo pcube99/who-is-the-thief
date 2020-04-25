@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 public interface RoomDao {
     ResponseEntity<Room> findRoom(String roomCode) throws Exception;
 
-    ResponseEntity<Room> createRoom(String roomName, Integer noOfRounds, String firstPlayerName) throws Exception;
+    ResponseEntity<Room> createRoom(String roomName, Integer noOfRounds) throws Exception;
 
     ResponseEntity<Boolean> joinRoom(String roomCode, String playerName) throws Exception;
 

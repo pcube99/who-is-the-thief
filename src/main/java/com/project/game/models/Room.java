@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,17 +26,16 @@ public class Room {
     private String id ;
     @JsonProperty("room_code")
     @SerializedName("room_code")
-    private String roomCode ;
-    //TODO: Is roomName necessary ?
+    private String roomCode = "" ;
     @JsonProperty("room_name")
     @SerializedName("room_name")
-    private String roomName ;
+    private String roomName = "";
     @JsonProperty("player_info")
     @SerializedName("player_info")
-    private List<PlayerInfo> playersInfo ;
+    private List<PlayerInfo> playersInfo = new ArrayList<>();
     @JsonProperty("no_of_rounds")
     @SerializedName("no_of_rounds")
-    private Integer noOfRounds ;
+    private Integer noOfRounds = 0 ;
 }
 
 

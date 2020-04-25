@@ -1,7 +1,6 @@
 package com.project.game.Dao.room;
 
 import com.project.game.constants.Constants;
-import com.project.game.exception.DocumentNotFoundException;
 import com.project.game.models.PlayerInfo;
 import com.project.game.models.Room;
 import lombok.extern.slf4j.Slf4j;
@@ -31,54 +30,56 @@ public class RoomDaoImpl implements RoomDao {
     }
 
     @Override
+    public ResponseEntity<Room> createRoom(String roomName, Integer noOfRounds) throws Exception {
+        log.info("Request received to create room with roomName: {} and noOfRounds : {}", roomName, noOfRounds);
+        String roomCode = UUID.randomUUID().toString().substring(0, 4);
+        List<PlayerInfo> players = new ArrayList<>();
+        Room room = Room.builder().roomName(roomName).roomCode(roomCode).noOfRounds(noOfRounds).playersInfo(players).build();
+        Room roomInDb ;
+        try {
+            roomInDb = mongoTemplate.save(room);
+            log.info("Room saved in DB: {}", roomInDb);
+        } catch (Exception e) {
+            log.error("mongodb save operation failed");
+            throw new Exception("mongodb save operation failed");
+        }
+        return new ResponseEntity<>(roomInDb, HttpStatus.OK);
+    }
+
+    @Override
     public ResponseEntity<Room> findRoom(String roomCode) throws Exception {
-        log.info("Request received for room_code: [{}]", roomCode);
+        log.info("Request received for room_code: {}", roomCode);
         Query query = new Query();
         query.addCriteria(Criteria.where(Constants.ROOM_CODE).is(roomCode));
-        Room roomInDb = null;
+        Room roomInDb ;
         try {
             roomInDb = mongoTemplate.findOne(query, Room.class);
-            log.info("Room found in DB: [{}]", roomInDb);
+            log.info("Room found in DB: {}", roomInDb);
         } catch (Exception e) {
             log.error("mongodb search operation failed");
             throw new Exception("mongodb search operation failed");
         }
         if (roomInDb == null) {
-            log.error("No room found with code: [{}]", roomCode);
-            throw new DocumentNotFoundException("No room with roomCode: { " + roomCode + " }");
+            log.error("No room found with code: {}", roomCode);
+            return new ResponseEntity<>(new Room(), HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(roomInDb, HttpStatus.FOUND);
-    }
-
-    @Override
-    public ResponseEntity<Room> createRoom(String roomName, Integer noOfRounds, String firstPlayerName) throws Exception {
-        log.info("Request received to create room with roomName: [{}] , noOfRounds : [{}] and firstPlayerName : [{}]",roomName,noOfRounds,firstPlayerName) ;
-        String roomCode = UUID.randomUUID().toString().substring(0, 4);
-        List<PlayerInfo> players = new ArrayList<>();
-        players.add(PlayerInfo.builder().name(firstPlayerName).score(0).build());
-        Room room = Room.builder().roomName(roomName).roomCode(roomCode).noOfRounds(noOfRounds).playersInfo(players).build();
-        Room roomInDb = null;
-        try {
-            roomInDb = mongoTemplate.save(room);
-            log.info("Room saved in DB: [{}]", roomInDb);
-        } catch (Exception e) {
-            log.error("mongodb save operation failed");
-            throw new Exception("mongodb save operation failed");
-        }
-        return new ResponseEntity<>(roomInDb, HttpStatus.CREATED);
+        return new ResponseEntity<>(roomInDb, HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<Boolean> joinRoom(String roomCode, String playerName) throws Exception {
         ResponseEntity<Room> roomResponseEntity = findRoom(roomCode);
         Room room = roomResponseEntity.getBody();
+        if(room.getRoomCode().length() == 0) {
+            return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+        }
         if (room.getPlayersInfo().size() < 4) {
             PlayerInfo newPlayer = PlayerInfo.builder().name(playerName).score(0).build();
             room.getPlayersInfo().add(newPlayer);
-            Room roomInDb = null;
+            Room roomInDb ;
             try {
                 roomInDb = mongoTemplate.save(room);
-                log.info("Room updated in DB: [{}]", roomInDb);
+                log.info("Room updated in DB: {}", roomInDb);
             } catch (Exception e) {
                 log.error("mongodb update operation failed");
                 throw new Exception("mongodb update operation failed");
