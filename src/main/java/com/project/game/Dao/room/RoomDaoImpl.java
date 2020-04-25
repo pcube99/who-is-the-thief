@@ -32,19 +32,19 @@ public class RoomDaoImpl implements RoomDao {
 
     @Override
     public ResponseEntity<Room> findRoom(String roomCode) throws Exception {
-        log.info("Request received for room_code: {}", roomCode);
+        log.info("Request received for room_code: [{}]", roomCode);
         Query query = new Query();
         query.addCriteria(Criteria.where(Constants.ROOM_CODE).is(roomCode));
         Room roomInDb = null;
         try {
             roomInDb = mongoTemplate.findOne(query, Room.class);
-            log.info("Room found in DB: {}", roomInDb);
+            log.info("Room found in DB: [{}]", roomInDb);
         } catch (Exception e) {
-            log.info("mongodb search operation failed");
+            log.error("mongodb search operation failed");
             throw new Exception("mongodb search operation failed");
         }
         if (roomInDb == null) {
-            log.info("No room found with code: {}", roomCode);
+            log.error("No room found with code: [{}]", roomCode);
             throw new DocumentNotFoundException("No room with roomCode: { " + roomCode + " }");
         }
         return new ResponseEntity<>(roomInDb, HttpStatus.FOUND);
@@ -60,9 +60,9 @@ public class RoomDaoImpl implements RoomDao {
         Room roomInDb = null;
         try {
             roomInDb = mongoTemplate.save(room);
-            log.info("Room saved in DB: {}", roomInDb);
+            log.info("Room saved in DB: [{}]", roomInDb);
         } catch (Exception e) {
-            log.info("mongodb save operation failed");
+            log.error("mongodb save operation failed");
             throw new Exception("mongodb save operation failed");
         }
         return new ResponseEntity<>(roomInDb, HttpStatus.CREATED);
@@ -78,9 +78,9 @@ public class RoomDaoImpl implements RoomDao {
             Room roomInDb = null;
             try {
                 roomInDb = mongoTemplate.save(room);
-                log.info("Room updated in DB: {}", roomInDb);
+                log.info("Room updated in DB: [{}]", roomInDb);
             } catch (Exception e) {
-                log.info("mongodb update operation failed");
+                log.error("mongodb update operation failed");
                 throw new Exception("mongodb update operation failed");
             }
             return new ResponseEntity<>(true, HttpStatus.OK);
