@@ -1,27 +1,35 @@
 package com.project.game.service;
 
+import com.project.game.Dao.room.RoomDaoImpl;
 import com.project.game.models.Room;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * Created by havyapanchal on 24 Apr, 2020 , 1:14 PM
  */
 @Service
+@Slf4j
+//TODO:  Add logs
 public class RoomService {
-    private MongoTemplate mongoTemplate;
+    private RoomDaoImpl roomDaoImpl;
 
     @Autowired
-    public RoomService(MongoTemplate mongoTemplate) {
-        this.mongoTemplate = mongoTemplate;
+    public RoomService(RoomDaoImpl roomDaoImpl) {
+        this.roomDaoImpl = roomDaoImpl;
     }
 
-    public List<Room> test() {
-        return mongoTemplate.findAll(Room.class) ;
+    public ResponseEntity<Room> findRoom(String roomCode) throws Exception {
+        return roomDaoImpl.findRoom(roomCode);
+    }
+
+    public ResponseEntity<Room> createRoom(String roomName, Integer noOfRounds, String firstPlayerName) throws Exception {
+        return roomDaoImpl.createRoom(roomName, noOfRounds, firstPlayerName);
+    }
+
+    public ResponseEntity<Boolean> joinRoom(String roomCode, String playerName) throws Exception {
+        return roomDaoImpl.joinRoom(roomCode, playerName);
     }
 }
