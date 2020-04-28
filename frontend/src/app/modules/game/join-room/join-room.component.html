@@ -1,42 +1,52 @@
 <div class="container">
-<div class="carousel " *ngIf="!hideCarousel">
-<span *ngFor="let x of images; let i=index;">
-    <img src="assets/images/128_{{i+1}}.png" alt="" class="circle responsive-img carousel-item"
-    (click)="selectProfilePic(i+1);">
-</span>
-</div>
+  <div class="carousel " *ngIf="!hideCarousel">
+    <span *ngFor="let x of images; let i=index;">
+      <img src="assets/images/128_{{i+1}}.png" alt="" class="circle responsive-img carousel-item"
+        (click)="selectProfilePic(i+1);">
+    </span>
+  </div>
 
-<div *ngIf="selectedProfile" class="row">
-    <img src="assets/images/128_{{profilePicNumber}}.png" alt="" 
-        class="circle responsive-img col s6 offset-s3 m4 offset-m4">
-</div>
+  <div *ngIf="selectedProfile" class="row">
+    <img src="assets/images/128_{{profilePicNumber}}.png" alt=""
+      class="circle responsive-img col s6 offset-s3 m4 offset-m4">
+  </div>
 
-<div class="row" *ngIf="selectedProfile">
+  <div class="row" *ngIf="selectedProfile">
     <form class="col s12" [formGroup]="joinRoomForm" id="joinRoomForm">
       <div class="row">
-        <div class="input-field col s6 offset-s3">
+        <div class="input-field col s12 m6 offset-m3 l6 offset-l3">
           <i class="material-icons prefix">account_circle</i>
-          <input id="icon_prefix" formControlName="userName" [(ngModel)]="userName" required minlength="3" maxlength="30" name="userName" type="text" class="validate">
+          <input id="icon_prefix" formControlName="userName" [(ngModel)]="userName" required minlength="3"
+            maxlength="30" name="userName" type="text" class="validate">
           <label for="icon_prefix">User Name</label>
-          <span class="helper-text" id="userNameError" data-error="Enter atleast 3 characters!"></span>
+          <span class="error-message" *ngIf="joinFormControls.userName.errors?.required && submitted == true">Username
+            is required</span>
+          <span class="error-message" *ngIf="joinFormControls.userName.errors?.maxLength && submitted == true">Minimum 3
+            characters are required</span>
+          <span class="error-message" *ngIf="joinFormControls.userName.errors?.minLength && submitted == true">Maximum
+            30 characters are allowed</span>
         </div>
 
-        <div class="input-field col s6 offset-s3">
-            <i class="material-icons prefix">play_arrow</i>
-            <input id="icon_play" formControlName="roomId" [(ngModel)]="roomId" required  minlength="5" maxlength="5" name="roomId" type="text" class="validate">
-            <label for="icon_play">Room ID</label>
-            <span class="helper-text" id="roomIdError" data-error="Enter valid Room ID"></span>
+        <div class="input-field col s12 m6 offset-m3 l6 offset-l3">
+          <i class="material-icons prefix">play_arrow</i>
+          <input id="icon_play" formControlName="roomId" [(ngModel)]="roomId" required minlength="5" maxlength="5"
+            name="roomId" type="text" class="validate">
+          <label for="icon_play">Room ID</label>
+          <span class="error-message" *ngIf="joinFormControls.roomId.valid && submitted == true">Enter valid 4 digit
+            room id.</span>
+          <span class="error-message" *ngIf="joinFormControls.roomId.errors?.required && submitted == true">Room id is
+            required.</span>
+
         </div>
 
-        <div class="input-field col s6 offset-s3 m6 offset-m3">
-            <a class="waves-effect waves-light btn-small" id="startButton" (click)="validateForm(); joinRoom();">
-                <i class="material-icons right">chevron_right</i> <strong>Start</strong>
-            </a>
-        </div>
+        <button class="btn waves-effect waves-light col s8 offset-s2 m4 offset-m4 l4 offset-l4" id="startButton"
+          type="submit" name="action" (click)="validateForm() && joinRoom(); submitted =true;">Start
+          <i class="material-icons right">send</i>
+        </button>
       </div>
 
-      
+
 
     </form>
   </div>
-  </div>
+</div>

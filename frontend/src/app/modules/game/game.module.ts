@@ -7,6 +7,7 @@ import { JoinRoomComponent } from './join-room/join-room.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ReactiveFormsModule ,FormsModule} from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { PlayComponent } from './play/play.component';
 
 
 
@@ -17,6 +18,7 @@ import { HttpClientModule } from '@angular/common/http';
     CreateRoomComponent,
     JoinRoomComponent,
     ProfileComponent,
+    PlayComponent,
     
     
   ],
@@ -32,7 +34,8 @@ import { HttpClientModule } from '@angular/common/http';
     CreateRoomComponent,
     JoinRoomComponent,
     ProfileComponent,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    PlayComponent
   ]
 })
 export class GameModule { }

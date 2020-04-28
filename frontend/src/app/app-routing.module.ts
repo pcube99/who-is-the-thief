@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './modules/game/home/home.component';
 import { CreateRoomComponent } from './modules/game/create-room/create-room.component';
 import { JoinRoomComponent } from './modules/game/join-room/join-room.component';
+import { PlayComponent } from './modules/game/play/play.component';
 
 
 const routes: Routes = [
@@ -21,6 +22,10 @@ const routes: Routes = [
     {
       path: 'joinRoom',
       component: JoinRoomComponent
+    },
+    {
+      path: 'play',
+      component: PlayComponent
     },
     {
       path: '**',

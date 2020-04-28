@@ -18,11 +18,13 @@ export class JoinRoomComponent implements OnInit {
   userName: any;
   roomId: any;
   baseUrl: any;
+  submitted: any;
   constructor(private fb: FormBuilder,
     private router: Router,
     private http: HttpClient) { }
 
   ngOnInit(): void {
+    this.submitted = false;
     this.hideCarousel = false;
     this.selectedProfile = false;
     this.profilePicNumber = 0;
@@ -44,7 +46,8 @@ export class JoinRoomComponent implements OnInit {
 
   createForm() {
     this.joinRoomForm = this.fb.group({
-      userName: new FormControl('', [Validators.required, Validators.minLength(3)]),
+      userName: new FormControl('', [Validators.required, Validators.minLength(3),
+        Validators.maxLength(30)]),
       roomId: new FormControl('', [Validators.required, Validators.minLength(4)]),
     });
   }

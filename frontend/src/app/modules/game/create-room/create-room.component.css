@@ -6,3 +6,25 @@
     margin: 5% 15%;
     width: auto;
 }
+
+.error-message {
+    color: red;
+    margin: auto 15%;
+    align-self: center;
+}
+#title {
+    margin-top: 5%;
+}
+@media(max-width: 426px) {
+    #createButton {
+        margin: 5% 15%;
+        width: 70%;
+    }
+    #shareButton {
+        margin: 5% 15%;
+        width: 70%;
+    }
+    #content {
+        margin-top: 10% !important;
+    }
+}   

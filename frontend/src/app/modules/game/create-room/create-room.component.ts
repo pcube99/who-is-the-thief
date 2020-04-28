@@ -15,13 +15,16 @@ export class CreateRoomComponent implements OnInit {
   shareLink: any;
   roomName: any;
   numberOfRounds: any;
+  shareLink1: any;
+  submitted: any;
   constructor(private http: HttpClient,
     private fb: FormBuilder) { }
 
   ngOnInit(): void {
-    this.shareLink = "You have been invited to play Who is the theif? \n \n " +
-      " Click below link to join the room and start playing. \n " +
-      "http://localhost:4300/app/play?roomId=f153";
+    this.submitted = false;
+    this.shareLink = "You have been invited to play *Who is the theif?* \n \n" +
+      "Click below link to join the room and start playing. \n \n" +
+      "https://whoisthetheif.web.app/app/play?roomId=f153";
       this.shareLink = encodeURI(this.shareLink);
       console.log(this.shareLink);
     this.selectedProfile = true;

@@ -1,18 +1,56 @@
-#title {
-  font: 100 30px 'Oleo Script', Helvetica, sans-serif;
-  color: #2b2b2b;
-  text-shadow: 4px 4px 0px rgba(0,0,0,0.1);
-  margin-top: 15%;
-}
-
 #create {
     width: 45%;
     background-color: #34ad54;
     margin: 5% 30%;
+    font-weight: bold;
 }
 
 #join {
     width: 45%;
     background-color: #2a9ac7;
     margin: 5% 30%;
+    font-weight: bold;
+}
+
+#title {
+  margin: 10% auto;
+}
+
+.wrapWord {
+  word-wrap: break-word;
+}
+
+@media(min-width: 900px) {
+  #create {
+    margin: 2% 30% !important;
+}
+
+#join {
+    margin: 2% 30% !important;
+}
+
+#title {
+  margin: 5% auto !important;
+}
+}
+@media(max-width: 600px) {
+  .wrapWord {
+    font-size: 15px;
+    padding: 0%;
+  }
+
+  .btn, .btn-large {
+    margin: 0 auto;
+    word-wrap: break-word;
+  }
+}
+
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: #c4c3bc;
+  text-align: center;
+  font-weight: bold;
 }

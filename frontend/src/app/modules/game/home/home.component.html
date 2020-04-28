@@ -1,14 +1,18 @@
 <div class="container">
     <div class="row">
-        <div class="col s6 offset-s3 l8 offset-l2 m6 offset-m3" id="title">
-            Who is the theif ?
+        <div class="col s12 m12 offline-m3 center-align" id="title">
+           <h3> Who is the theif ? </h3>
         </div>
     </div>
     <a class="waves-effect waves-light btn-large" id="create" (click)="createRoom()">
-        <i class="material-icons right">add_box</i>Create a room
+        <i class="material-icons right">add_box</i> <span class="wrapWord">Create a room</span>
     </a>
     <a class="waves-effect waves-light btn-large" id="join" (click)="joinRoom()">
-        <i class="material-icons right">supervisor_account</i>Join a room
+        <i class="material-icons right">supervisor_account</i> <span class="wrapWord">Join a room</span>
     </a>
-    <app-loader></app-loader>
 </div>
+
+<div class="footer">
+    <p>      © 2020 Developed with &hearts;	and &#x2615;
+    </p>
+  </div>

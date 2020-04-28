@@ -1,5 +1,12 @@
 #startButton {
     background-color: #03fc5a;
     color: black;
+    font-weight: bold;
+    margin-top: 5%;
+}
+
+.error-message {
+    color: red;
     margin: auto 15%;
+    align-self: center;
 }
