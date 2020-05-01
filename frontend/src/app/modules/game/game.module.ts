@@ -8,6 +8,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { ReactiveFormsModule ,FormsModule} from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { PlayComponent } from './play/play.component';
+import { ScoreboardComponent } from './scoreboard/scoreboard.component';
 
 
 
@@ -19,6 +20,7 @@ import { PlayComponent } from './play/play.component';
     JoinRoomComponent,
     ProfileComponent,
     PlayComponent,
+    ScoreboardComponent,
     
     
   ],

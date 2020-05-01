@@ -1,0 +1,21 @@
+.customizeBorder {
+    border: "1px solid black";
+}
+
+#dashboard {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #c4c3bc;
+    font-weight: bold;
+    margin: 0;
+}
+
+#userRole {
+    vertical-align: middle;
+}
+
+.btn {
+    margin: 3% 3%;
+}
