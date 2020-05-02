@@ -3,25 +3,33 @@
 <div class="container">
     <!-- <button data-target="modal1" class="btn modal-trigger">Modal</button> -->
     <div class="row">
-        <div id="player1" class="col s4 m4 l2 valign-wrapper offset-s4 offset-m4 offset-l5">
-            sdsf
+        <div id="player1" class="col s4 m4 l2 valign-wrapper offset-s4 offset-m4 offset-l5"
+        (click)="choosenPlayer(1);">
+            <img src="assets/images/128_1.png" alt="" class="circle responsive-img carousel-item">
+            Captain America
         </div>
     </div>
     <div class="row">
-        <div id="player2" class="col s4 m4 l2 valign-wrapper">
-            df
+        <div id="player2" class="col s4 m4 l2 valign-wrapper" (click)="choosenPlayer(2);">
+            <img src="assets/images/128_2.png" alt="" class="circle responsive-img carousel-item">
+            Iron Man
         </div>
-        <div id="player3" class="col s4 m4 l2 valign-wrapper">
-            asd
+        
+        <div id="mid" class="col s4 m4 l2 valign-wrapper">
+            Choose a player, who do You think is chor <!-- TODO replace chor with dynamic -->
+        </div>
+        <div id="player3" class="col s4 m4 l2 valign-wrapper" (click)="choosenPlayer(3);">
+            <img src="assets/images/128_5.png" alt="" class="circle responsive-img carousel-item">
+            Thor
         </div>
     </div>
     <div class="row" id="dashboard">
-        <div class="col s3 m3 l3 customizeBorder" id="userRole">
+        <div id="userRole" class="col s3 m3 l3 customizeBorder valign-wrapper" >
             You are Raja
         </div>
         <div class="col s6 m6 l6 customizeBorder">
-            <a class="waves-effect waves-light btn"><i class="material-icons right">block</i>Bluff</a>
-            <a class="waves-effect waves-light btn"><i class="material-icons right">beenhere</i>Reveal</a>
+            <a id="bluff" class="waves-effect waves-light btn" (click)='tossCheats()'><i class="material-icons right" >block</i>Bluff</a>
+            <a id="reveal" class="waves-effect waves-light btn"><i class="material-icons right">beenhere</i>Reveal</a>
         </div>
 
         <div class="col s3 m3 l3 customizeBorder">
@@ -31,8 +39,15 @@
                   <i class="large material-icons">mode_edit</i>
                 </a>
                 <ul>
-                  <li><a class="btn-floating blue"><i class="material-icons">dashboard</i>sdf</a></li>
-                  <li><a class="btn-floating red darken-1"><i class="material-icons">format_quote</i></a></li>
+
+                <li><a class="btn-floating blue btn modal-trigger" data-target="modal1">
+                      <i class="material-icons">dashboard</i>
+                    </a>
+                </li>
+                <li><a class="btn-floating red darken-1" (click)="exitGamePopup()">
+                    <i class="material-icons">close</i>
+                    </a>
+                </li>
                 </ul>
               </div>
         </div>

@@ -21,6 +21,7 @@
     "@angular/router": "~9.0.1",
     "jquery": "^3.5.0",
     "jquery-form-validator": "^2.3.79",
+    "lodash": "^4.17.15",
     "materialize-css": "^1.0.0",
     "rxjs": "~6.5.4",
     "save": "^2.4.0",

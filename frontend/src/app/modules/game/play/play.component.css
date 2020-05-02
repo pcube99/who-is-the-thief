@@ -1,5 +1,5 @@
-.customizeBorder {
-    border: "1px solid black";
+#userRole {
+    height: inherit;
 }
 
 #dashboard {
@@ -11,9 +11,12 @@
     font-weight: bold;
     margin: 0;
 }
-
-#userRole {
-    vertical-align: middle;
+#mid {
+    left: 0;
+    top: 0;
+    right: 33%;
+    bottom: 0;
+    position: fixed;
 }
 
 .btn {
@@ -33,7 +36,7 @@
 #player2 {
     position: fixed;
     vertical-align: middle;
-    margin-top: 30%;
+    margin-top: 50%;
     background-color: #d9d9d9;
     left: 0%;
     height: 20%;
@@ -43,10 +46,15 @@
 
 }
 
+.circle {
+    width: 50px;
+    padding-right: 5px;
+}
+
 #player3 {
     position: fixed;
     vertical-align: middle;
-    margin-top: 30%;
+    margin-top: 50%;
     right: 0%;
     background-color: #d9d9d9;
     height: 20%;    
@@ -57,7 +65,7 @@
 }
 
 .fixed-action-btn {
-    right: 0 !important;
-    bottom: 0 !important;
+    right: 5px !important;
+    bottom: 5px !important;
 
 }
