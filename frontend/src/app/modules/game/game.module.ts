@@ -9,6 +9,7 @@ import { ReactiveFormsModule ,FormsModule} from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { PlayComponent } from './play/play.component';
 import { ScoreboardComponent } from './scoreboard/scoreboard.component';
+import { OtherPlayersComponent } from './other-players/other-players.component';
 
 
 
@@ -21,6 +22,7 @@ import { ScoreboardComponent } from './scoreboard/scoreboard.component';
     ProfileComponent,
     PlayComponent,
     ScoreboardComponent,
+    OtherPlayersComponent,
     
     
   ],

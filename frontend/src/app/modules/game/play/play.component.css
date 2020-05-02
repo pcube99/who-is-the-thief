@@ -19,3 +19,45 @@
 .btn {
     margin: 3% 3%;
 }
+
+#player1 {
+    position: fixed;
+    height: 20%;
+    margin: auto 28%;
+    background-color: #d9d9d9; 
+    border-radius: 15px;
+    border: 1px solid #556166;
+    /* left: 0; */
+}
+
+#player2 {
+    position: fixed;
+    vertical-align: middle;
+    margin-top: 30%;
+    background-color: #d9d9d9;
+    left: 0%;
+    height: 20%;
+    border-radius: 15px;
+    border: 1px solid #556166;
+    
+
+}
+
+#player3 {
+    position: fixed;
+    vertical-align: middle;
+    margin-top: 30%;
+    right: 0%;
+    background-color: #d9d9d9;
+    height: 20%;    
+    border-radius: 15px;
+    border: 1px solid #556166;
+
+
+}
+
+.fixed-action-btn {
+    right: 0 !important;
+    bottom: 0 !important;
+
+}
