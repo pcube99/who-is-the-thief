@@ -45,18 +45,18 @@ export class PlayComponent implements OnInit {
     // this.playerStatus();
     const roles = ["Raja", "Chor", "Sipahi", "Mantri"];
     console.log(_.sampleSize( roles, 4));
-    $('#player1').addClass("pulse");
-    $('#player2').addClass("pulse");
-    $('#player3').addClass("pulse");
+    $('#player1').addClass("pulse-button");
+    $('#player2').addClass("pulse-button");
+    $('#player3').addClass("pulse-button");
     $('#bluff').addClass('disabled');
     $('#reveal').addClass('disabled');
   }
 
   choosenPlayer(index) {
     console.log(index);
-    $('#player1').removeClass("pulse");
-    $('#player2').removeClass("pulse");
-    $('#player3').removeClass("pulse");
+    $('#player1').removeClass("pulse-button");
+    $('#player2').removeClass("pulse-button");
+    $('#player3').removeClass("pulse-button");
   }
 
 }

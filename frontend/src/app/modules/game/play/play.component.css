@@ -1,71 +1,77 @@
-#userRole {
-    height: inherit;
-}
 
 #dashboard {
     position: fixed;
     left: 0;
     bottom: 0;
     width: 100%;
+    height: 15%;
     background-color: #c4c3bc;
     font-weight: bold;
     margin: 0;
-}
-#mid {
-    left: 0;
-    top: 0;
-    right: 33%;
-    bottom: 0;
-    position: fixed;
 }
 
 .btn {
     margin: 3% 3%;
 }
-
-#player1 {
-    position: fixed;
-    height: 20%;
-    margin: auto 28%;
-    background-color: #d9d9d9; 
-    border-radius: 15px;
-    border: 1px solid #556166;
-    /* left: 0; */
-}
-
-#player2 {
-    position: fixed;
-    vertical-align: middle;
-    margin-top: 50%;
-    background-color: #d9d9d9;
-    left: 0%;
-    height: 20%;
-    border-radius: 15px;
-    border: 1px solid #556166;
-    
-
+.card-panel {
+    padding-left: 2% !important;
 }
 
 .circle {
-    width: 50px;
-    padding-right: 5px;
-}
-
-#player3 {
-    position: fixed;
-    vertical-align: middle;
-    margin-top: 50%;
-    right: 0%;
-    background-color: #d9d9d9;
-    height: 20%;    
-    border-radius: 15px;
-    border: 1px solid #556166;
-
-
+    width: 55px;
+    padding-right: 5%;
 }
 
 .fixed-action-btn {
     right: 5px !important;
     bottom: 5px !important;
+}
 
+.customizeBorder {
+    display: flex;
+    justify-content: center;
+}
+
+#player2 {
+    position: fixed;
+    left: 1% !important;
+    top: 40%;
+    width: 30%;    
+
+}
+.pulse-button {
+
+    position: relative;
+    border: none;
+    box-shadow: 0 0 0 0 #ffcccc;
+    background-color: #ffcccc;
+    background-size:cover;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    -webkit-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1);
+    -moz-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1);
+    -ms-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1);
+    animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1);
+  }
+
+  .pulse-button:hover {
+    -webkit-animation: none;-moz-animation: none;-ms-animation: none;animation: none;
+  }
+  
+  @-webkit-keyframes pulse {to {box-shadow: 0 0 0 45px rgba(232, 76, 61, 0);}}
+  @-moz-keyframes pulse {to {box-shadow: 0 0 0 45px rgba(232, 76, 61, 0);}}
+  @-ms-keyframes pulse {to {box-shadow: 0 0 0 45px rgba(232, 76, 61, 0);}}
+  @keyframes pulse {to {box-shadow: 0 0 0 45px rgba(232, 76, 61, 0);}}
+#player3 {
+    position: fixed;
+    right: 1% !important;
+    top: 40%;
+    width: 30%;
+}
+
+#helpText {
+    position: fixed;
+    top: 45%;
+    left: 40%;
+    right: 40%;
 }
