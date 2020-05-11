@@ -10,6 +10,7 @@ declare let $: any;
 })
 export class JoinRoomComponent implements OnInit {
   images: any = [];
+  loading: any;
   hideCarousel: any;
   selectedProfile: any;
   profilePicNumber: any;
@@ -24,6 +25,7 @@ export class JoinRoomComponent implements OnInit {
     private http: HttpClient) { }
 
   ngOnInit(): void {
+    this.loading = false;
     this.submitted = false;
     this.hideCarousel = false;
     this.selectedProfile = false;
@@ -47,7 +49,7 @@ export class JoinRoomComponent implements OnInit {
   createForm() {
     this.joinRoomForm = this.fb.group({
       userName: new FormControl('', [Validators.required, Validators.minLength(3),
-        Validators.maxLength(30)]),
+        Validators.maxLength(12)]),
       roomId: new FormControl('', [Validators.required, Validators.minLength(4)]),
     });
   }
@@ -57,6 +59,7 @@ export class JoinRoomComponent implements OnInit {
   }
   validateForm() {
     if(this.joinFormControls.userName.valid && this.joinFormControls.roomId.valid) {
+      this.joinRoom();
       return true;
     } else {
       return false;
@@ -64,13 +67,30 @@ export class JoinRoomComponent implements OnInit {
   }
 
   joinRoom() {
+    this.loading = true;
     // http://54.87.54.255/rooms?room_code=635b&player_name=Jeet
     console.log('this.userName' + this.userName + " this.roomId " + this.roomId);
     this.baseUrl = "http://54.87.54.255/rooms?room_code="+ this.roomId + "&player_name=" + this.userName;
-    this.http.get( this.baseUrl).subscribe({
-    next: data => console.log(data),
-    error: error => console.error('There was an error!', error)
+    this.http.get( this.baseUrl, {responseType: 'text'}).subscribe({
+    next: data => {
+      console.log(data);
+      this.loading = false;
+      localStorage.setItem('playerId' , data);
+      this.router.navigate(['app/play'], { queryParams: { roomId: this.roomId } });
+    },
+    error: error =>  {
+      console.error('There was an error!', error);
+      this.loading = false;
+    }
   });
   }
 
+  ngAfterViewInit() {
+    if(localStorage.getItem('roomId') != null) {
+      $('#icon_play').click();
+      this.roomId = localStorage.getItem('roomId');
+      console.log("room id " + this.roomId);
+      localStorage.removeItem('roomId');
+    }
+  }
 }

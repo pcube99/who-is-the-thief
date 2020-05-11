@@ -1,0 +1,19 @@
+#waitingLobby {
+    height: 100%;
+    width: 100%;
+    background-color: aliceblue;
+}
+
+img {
+    display:block;
+    margin: 0 auto;
+    margin-top: 20%;
+}
+
+#waitingText {
+    font-size: larger;
+    position: fixed;
+    top: 63%;
+    left: 30%;
+    right: 30%;
+}

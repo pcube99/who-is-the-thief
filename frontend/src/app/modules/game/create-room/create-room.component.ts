@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FormGroup, Validators, FormControl, FormBuilder } from '@angular/forms';
+import { Router } from '@angular/router';
 declare let $: any;
 @Component({
   selector: 'app-create-room',
@@ -17,10 +18,17 @@ export class CreateRoomComponent implements OnInit {
   numberOfRounds: any;
   shareLink1: any;
   submitted: any;
+  loading: any;
   constructor(private http: HttpClient,
-    private fb: FormBuilder) { }
+    private fb: FormBuilder,
+    private router: Router) {
+      window.addEventListener('load', this.detectOffline);
+      window.addEventListener('online', this.detectOffline);
+      window.addEventListener('offline', this.detectOffline);
+    }
 
   ngOnInit(): void {
+    this.loading = false;
     this.submitted = false;
     this.shareLink = "You have been invited to play *Who is the theif?* \n \n" +
       "Click below link to join the room and start playing. \n \n" +
@@ -53,16 +61,34 @@ export class CreateRoomComponent implements OnInit {
   }
 
   createRoom() {
+    this.loading = true;
     console.log('this.roomName' + this.roomName + " this.numberOfRounds " + this.numberOfRounds);
     this.baseUrl = "http://54.87.54.255/rooms?room_name="+ this.roomName + "&rounds=" + this.numberOfRounds;
     this.http.post( this.baseUrl, { title: 'Angular POST Request Example' }).subscribe({
-    next: data => console.log(data),
-    error: error => console.error('There was an error!', error)
+    next: data => {
+      console.log(data);
+      this.result = data;
+      this.loading = false;
+      localStorage.setItem('roomId' , this.result.room_code );
+      this.router.navigate(['app/joinRoom']);
+    },
+    error: error =>  {
+      console.error('There was an error!', error);
+      this.loading = false;
+    }
 })
-    
   }
 
   shareRoom() {
     
   }
+
+  detectOffline() {
+    if(navigator.onLine) {
+      document.documentElement.style.backgroundColor = '#ebe8e4';
+    } else {
+      document.documentElement.style.backgroundColor = 'red';
+    }
+  }
+
 }

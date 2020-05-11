@@ -1,6 +1,6 @@
 
-
-<div class="container">
+<app-waiting-lobby *ngIf="waiting"></app-waiting-lobby>
+<div class="container" *ngIf="!waiting">
     <!-- <button data-target="modal1" class="btn modal-trigger">Modal</button> -->
     <div class="row">
     <div class="col s6 offset-s3 m4 offset-m4 l4 offset-l4" >
@@ -8,7 +8,7 @@
         (click)="choosenPlayer(1)">
               <img src="assets/images/128_1.png" alt="" class="circle responsive-img">
               <span class="black-text">
-                Captain America
+                {{this.players[0].player_name}}
               </span>
         </div>
       </div>
@@ -18,7 +18,7 @@
         (click)="choosenPlayer(2)">
               <img src="assets/images/128_2.png" alt="" class="circle responsive-img">
               <span class="black-text">
-                Iron Man
+                {{this.players[1].player_name}}
               </span>
         </div>
       </div>
@@ -27,7 +27,7 @@
         (click)="choosenPlayer(3)">
               <img src="assets/images/128_3.png" alt="" class="circle responsive-img">
               <span class="black-text">
-                Thor
+                {{this.players[2].player_name}}
               </span>
         </div>
       </div>
@@ -65,5 +65,5 @@
           </div> -->
     </div>
 </div>
-
+</div>
 <app-scoreboard></app-scoreboard>

@@ -1,22 +1,42 @@
 import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 declare let $: any;
 import * as _ from 'lodash';
+import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-play',
   templateUrl: './play.component.html',
   styleUrls: ['./play.component.css']
 })
 export class PlayComponent implements OnInit {
-
-  constructor(private router: Router) { }
+  waiting: any;
+  loading: any;
+  baseUrl: any;
+  roomId: any;
+  roomData: any;
+  playersJoined: any;
+  currentPlayerId: any;
+  players: any;
+  constructor(private router: Router,
+    private http: HttpClient,
+    private route: ActivatedRoute) { 
+      this.route.queryParams.subscribe(params => {
+        this.roomId = params['roomId'];
+      });
+  }
 
   ngOnInit(): void {
     // Swal.fire('Each player have a limited amount of time to select the choice.')
-    $(document).ready(() => {
-      $('.fixed-action-btn').floatingActionButton();
-    });   
+    this.waiting = true;
+    this.loading = false;
+    this.currentPlayerId = localStorage.getItem('playerId');
+    console.log("this.currentPlayerId " + this.currentPlayerId);
+    this.players = [];
+    this.getRoomInfo();
+    // $(document).ready(() => {
+    //   $('.fixed-action-btn').floatingActionButton();
+    // });   
   }
 
   exitGamePopup() {
@@ -33,6 +53,40 @@ export class PlayComponent implements OnInit {
       }
     })
   }
+
+  async getRoomInfo() {
+    this.loading = true;
+    // this.roomId = '6458';
+    console.log(" this.roomId " + this.roomId);
+    this.baseUrl = "http://54.87.54.255/rooms/" + this.roomId;
+    await this.http.get(this.baseUrl).toPromise()
+      .then(data => {
+        this.roomData = data;
+        console.log('pp ' + JSON.stringify(this.roomData));
+        this.loading = false;
+        this.playersJoined = this.roomData.player_info.length;
+        console.log('roomData ' + this.playersJoined);
+    
+        for(let i=0; i<this.playersJoined;i++) {
+          if(this.currentPlayerId == this.roomData.player_info[i].player_id) {
+            continue;
+          }
+          this.players.push(this.roomData.player_info[i]);
+        }
+        console.log(this.players);
+        // this.router.navigate(['app/play'])
+      })
+      .catch(error => {
+        console.error('There was an error!', error);
+        this.loading = false;
+      });
+    if(this.playersJoined != 4) {
+      this.waiting = true;
+    } else {
+      this.waiting = false;
+    }
+  }
+
   playerStatus() {
     $('#player1').css('border', '2px solid red');
   }

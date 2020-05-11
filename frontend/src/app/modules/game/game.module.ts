@@ -10,6 +10,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { PlayComponent } from './play/play.component';
 import { ScoreboardComponent } from './scoreboard/scoreboard.component';
 import { OtherPlayersComponent } from './other-players/other-players.component';
+import { WaitingLobbyComponent } from './waiting-lobby/waiting-lobby.component';
 
 
 
@@ -23,6 +24,7 @@ import { OtherPlayersComponent } from './other-players/other-players.component';
     PlayComponent,
     ScoreboardComponent,
     OtherPlayersComponent,
+    WaitingLobbyComponent,
     
     
   ],
@@ -39,7 +41,10 @@ import { OtherPlayersComponent } from './other-players/other-players.component';
     JoinRoomComponent,
     ProfileComponent,
     ReactiveFormsModule,
-    PlayComponent
+    PlayComponent,
+    ScoreboardComponent,
+    OtherPlayersComponent,
+    WaitingLobbyComponent,
   ]
 })
 export class GameModule { }

@@ -1,4 +1,6 @@
-<div class="container">
+<app-loader *ngIf="loading" ></app-loader>
+
+<div [hidden]="loading" class="container">
   <div class="row">
     <div class="col s12 m6 offset-m3 l6 offset-l3 center-align" id="title">
       <h4>Join Room</h4>
@@ -22,22 +24,22 @@
         <div class="input-field col s12 m6 offset-m3 l6 offset-l3">
           <i class="material-icons prefix">account_circle</i>
           <input id="icon_prefix" formControlName="userName" [(ngModel)]="userName" required minlength="3"
-            maxlength="30" name="userName" type="text" class="validate">
+            maxlength="12" name="userName" type="text">
           <label for="icon_prefix">User Name</label>
           <span class="error-message" *ngIf="joinFormControls.userName.errors?.required && submitted == true">Username
             is required</span>
-          <span class="error-message" *ngIf="joinFormControls.userName.errors?.maxLength && submitted == true">Minimum 3
+          <span class="error-message" *ngIf="submitted == true && joinFormControls.userName.errors?.minLength">Minimum 3
             characters are required</span>
-          <span class="error-message" *ngIf="joinFormControls.userName.errors?.minLength && submitted == true">Maximum
-            30 characters are allowed</span>
+          <span class="error-message" *ngIf="joinFormControls.userName.errors?.maxLength && submitted == true">Maximum
+            12 characters are allowed</span>
         </div>
 
         <div class="input-field col s12 m6 offset-m3 l6 offset-l3">
           <i class="material-icons prefix">play_arrow</i>
-          <input id="icon_play" formControlName="roomId" [(ngModel)]="roomId" required minlength="5" maxlength="5"
-            name="roomId" type="text" class="validate">
+          <input id="icon_play" formControlName="roomId" [(ngModel)]="roomId" required minlength="4" maxlength="4"
+            name="roomId" type="text">
           <label for="icon_play">Room ID</label>
-          <span class="error-message" *ngIf="joinFormControls.roomId.valid && submitted == true">Enter valid 4 digit
+          <span class="error-message" *ngIf="joinFormControls.roomId.invalid && submitted == true">Enter valid 4 digit
             room id.</span>
           <span class="error-message" *ngIf="joinFormControls.roomId.errors?.required && submitted == true">Room id is
             required.</span>
@@ -45,7 +47,7 @@
         </div>
 
         <button class="btn waves-effect waves-light col s8 offset-s2 m4 offset-m4 l4 offset-l4" id="startButton"
-          type="submit" name="action" (click)="validateForm() && joinRoom(); submitted =true;">Start
+          type="submit" name="action" (click)="submitted =true; validateForm()">Start
           <i class="material-icons right">send</i>
         </button>
       </div>
