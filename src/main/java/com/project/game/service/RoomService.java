@@ -38,4 +38,8 @@ public class RoomService {
     public ResponseEntity<List<PlayerInfo>> updatePoints(String roomCode, Integer points, String playerId) throws Exception {
         return roomDaoImpl.updatePoints(roomCode, points, playerId);
     }
+
+    public ResponseEntity<Boolean> checkAllReady(String roomCode, String playerId) throws Exception {
+        return  roomDaoImpl.checkAllReady(roomCode, playerId);
+    }
 }

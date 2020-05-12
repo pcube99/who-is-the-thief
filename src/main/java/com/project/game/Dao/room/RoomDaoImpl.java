@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -72,11 +73,11 @@ public class RoomDaoImpl implements RoomDao {
         ResponseEntity<Room> roomResponseEntity = findRoom(roomCode);
         Room room = roomResponseEntity.getBody();
         if (room.getRoomCode().length() == 0) {
-            return new ResponseEntity<>("", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
         }
         if (room.getPlayersInfo().size() < 4) {
             String playerId = UUID.randomUUID().toString().substring(0,4) ;
-            PlayerInfo newPlayer = PlayerInfo.builder().name(playerName).score(0).playerId(playerId).build();
+            PlayerInfo newPlayer = PlayerInfo.builder().name(playerName).score(0).playerId(playerId).isReady(false).build();
             room.getPlayersInfo().add(newPlayer);
             Room roomInDb;
             try {
@@ -97,6 +98,10 @@ public class RoomDaoImpl implements RoomDao {
         ResponseEntity<Room> roomResponseEntity = findRoom(roomCode);
         Room room = roomResponseEntity.getBody();
         List<PlayerInfo> list = room.getPlayersInfo();
+        if(list == null)
+        {
+            return new ResponseEntity<>(Collections.EMPTY_LIST,HttpStatus.OK);
+        }
         for (PlayerInfo playerInfo : list) {
             if (playerInfo.getPlayerId().equals(playerId)) {
                 Integer currentScore = playerInfo.getScore();
@@ -116,4 +121,26 @@ public class RoomDaoImpl implements RoomDao {
         return new ResponseEntity<>(list,HttpStatus.OK) ;
     }
 
+    @Override
+    public ResponseEntity<Boolean> checkAllReady(String roomCode, String playerId) throws Exception {
+
+        ResponseEntity<Room> responseEntity = findRoom(roomCode) ;
+        Room room = responseEntity.getBody();
+        if(room == null)
+        {
+            return new ResponseEntity<>(false,HttpStatus.OK);
+        }
+        List<PlayerInfo> players = room.getPlayersInfo() ;
+        if(players.isEmpty())
+        {
+            return new ResponseEntity<>(false,HttpStatus.OK);
+        }
+        Boolean flag = true ;
+        for(PlayerInfo player: players)
+        {
+            if(player.getPlayerId().equals(playerId))continue;
+            flag = flag & player.getIsReady() ;
+        }
+        return new ResponseEntity<>(flag,HttpStatus.OK);
+    }
 }

@@ -36,6 +36,7 @@ public class Room {
     @JsonProperty("no_of_rounds")
     @SerializedName("no_of_rounds")
     private Integer noOfRounds = 0 ;
+
 }
 
 

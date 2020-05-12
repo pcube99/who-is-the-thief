@@ -17,4 +17,6 @@ public interface RoomDao {
     ResponseEntity<String> joinRoom(String roomCode, String playerName) throws Exception;
 
     ResponseEntity<List<PlayerInfo>> updatePoints(String roomCode,Integer points,String playerId) throws Exception ;
+
+    ResponseEntity<Boolean> checkAllReady(String roomCode, String playerId) throws Exception ;
 }

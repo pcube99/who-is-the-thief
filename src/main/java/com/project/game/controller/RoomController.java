@@ -46,4 +46,11 @@ public class RoomController {
     public ResponseEntity<List<PlayerInfo>> updatePoints(@RequestParam("room_code") String roomCode, @RequestParam("points") Integer points , @RequestParam("player_id") String playerId) throws Exception {
         return roomService.updatePoints(roomCode,points,playerId);
     }
+
+    @CrossOrigin
+    @GetMapping("/all-ready")
+    public ResponseEntity<Boolean> checkAllReady(@RequestParam("room_code") String roomCode, @RequestParam("player_id") String playerId) throws Exception
+    {
+        return roomService.checkAllReady(roomCode,playerId);
+    }
 }

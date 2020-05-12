@@ -20,4 +20,6 @@ public class PlayerInfo {
     private Integer score ;
     @JsonProperty("player_id")
     private String playerId ;
+    @JsonProperty("ready")
+    private Boolean isReady;
 }
