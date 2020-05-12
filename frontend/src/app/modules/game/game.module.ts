@@ -11,6 +11,7 @@ import { PlayComponent } from './play/play.component';
 import { ScoreboardComponent } from './scoreboard/scoreboard.component';
 import { OtherPlayersComponent } from './other-players/other-players.component';
 import { WaitingLobbyComponent } from './waiting-lobby/waiting-lobby.component';
+import { ErrorPageComponent } from './error-page/error-page.component';
 
 
 
@@ -25,6 +26,7 @@ import { WaitingLobbyComponent } from './waiting-lobby/waiting-lobby.component';
     ScoreboardComponent,
     OtherPlayersComponent,
     WaitingLobbyComponent,
+    ErrorPageComponent,
     
     
   ],
@@ -32,7 +34,7 @@ import { WaitingLobbyComponent } from './waiting-lobby/waiting-lobby.component';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
   ],
   exports: [
     HomeComponent,

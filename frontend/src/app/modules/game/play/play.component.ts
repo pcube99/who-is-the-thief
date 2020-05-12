@@ -11,6 +11,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class PlayComponent implements OnInit {
   waiting: any;
+  error: any;
   loading: any;
   baseUrl: any;
   roomId: any;
@@ -18,6 +19,7 @@ export class PlayComponent implements OnInit {
   playersJoined: any;
   currentPlayerId: any;
   players: any;
+  waitTimer: any;
   constructor(private router: Router,
     private http: HttpClient,
     private route: ActivatedRoute) { 
@@ -28,17 +30,19 @@ export class PlayComponent implements OnInit {
 
   ngOnInit(): void {
     // Swal.fire('Each player have a limited amount of time to select the choice.')
-    this.waiting = true;
-    this.loading = false;
+    this.waiting = false;
+    this.error = true;
+    this.loading = true;
     this.currentPlayerId = localStorage.getItem('playerId');
     console.log("this.currentPlayerId " + this.currentPlayerId);
     this.players = [];
     this.getRoomInfo();
+
     // $(document).ready(() => {
     //   $('.fixed-action-btn').floatingActionButton();
     // });   
   }
-
+ 
   exitGamePopup() {
     Swal.fire({
       title: 'Are you sure?',
@@ -74,19 +78,49 @@ export class PlayComponent implements OnInit {
           this.players.push(this.roomData.player_info[i]);
         }
         console.log(this.players);
-        // this.router.navigate(['app/play'])
       })
       .catch(error => {
         console.error('There was an error!', error);
         this.loading = false;
       });
-    if(this.playersJoined != 4) {
-      this.waiting = true;
-    } else {
-      this.waiting = false;
-    }
+      this.waitTimer = setInterval( this.isWaiting, 5000);
+      console.log(" this.roomId after " + this.roomId + this.waitTimer);
+      if (this.playersJoined < 2) {
+        this.waiting = true;
+      } else {
+        this.waiting = false;
+        clearInterval(this.waitTimer);
+        return;
+      }
   }
 
+  test() {
+    console.log('test');
+  }
+
+  isWaiting(roomId) {
+    console.log("iswaiting" + roomId);
+    this.baseUrl = "http://54.87.54.255/rooms/1a28";
+    this.http.get(this.baseUrl).subscribe({
+      next(data){
+        this.roomData = data;
+        this.playersJoined = this.roomData.player_info.length;
+        console.log('roomData ' + this.playersJoined);
+        if (this.playersJoined < 2) {
+          this.waiting = true;
+        } else {
+          this.waiting = false;
+          clearInterval(this.waitTimer);
+          console.log("time clear " + this.waiting);
+          return;
+        }
+      },
+      error(error) {
+        console.error('There was an error!', error);
+      }
+    });
+    
+  }
   playerStatus() {
     $('#player1').css('border', '2px solid red');
   }

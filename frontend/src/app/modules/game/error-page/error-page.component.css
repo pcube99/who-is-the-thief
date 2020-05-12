@@ -1,0 +1,17 @@
+#errorPage {
+    height: 100%;
+    width: 100%;
+    background-color: white;
+}
+
+img {
+    margin: 0 auto;
+}
+
+#errorText {
+    margin: 0 auto;
+}
+
+.btn-small {
+    margin-top: 5%;
+}

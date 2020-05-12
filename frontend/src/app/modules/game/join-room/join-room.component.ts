@@ -20,6 +20,7 @@ export class JoinRoomComponent implements OnInit {
   roomId: any;
   baseUrl: any;
   submitted: any;
+  roomIdInvalidError: any;
   constructor(private fb: FormBuilder,
     private router: Router,
     private http: HttpClient) { }
@@ -30,6 +31,7 @@ export class JoinRoomComponent implements OnInit {
     this.hideCarousel = false;
     this.selectedProfile = false;
     this.profilePicNumber = 0;
+    this.roomIdInvalidError = false;
     for(let i=0;i<16;i++) {
       this.images[i] = 0;
     }
@@ -80,6 +82,10 @@ export class JoinRoomComponent implements OnInit {
     },
     error: error =>  {
       console.error('There was an error!', error);
+      this.roomIdInvalidError = true;
+      setTimeout(() => {
+        this.roomIdInvalidError = false;
+      }, 9000)
       this.loading = false;
     }
   });

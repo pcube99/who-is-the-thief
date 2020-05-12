@@ -10,6 +10,8 @@
           "/favicon.ico",
           "/index.html",
           "/manifest.webmanifest",
+          "/frontend/src/app/modules/game/create-room/create-room.component.html",
+          "src/assets/images/waiting.gif",
           "/*.css",
           "/*.js"
         ]

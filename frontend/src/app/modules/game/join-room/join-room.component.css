@@ -10,3 +10,7 @@
     margin: auto 15%;
     align-self: center;
 }
+
+#roomIdInvalidError {
+    margin: 0 auto;
+}

@@ -28,9 +28,9 @@
           <label for="icon_prefix">User Name</label>
           <span class="error-message" *ngIf="joinFormControls.userName.errors?.required && submitted == true">Username
             is required</span>
-          <span class="error-message" *ngIf="submitted == true && joinFormControls.userName.errors?.minLength">Minimum 3
+          <span class="error-message" *ngIf="submitted == true && joinRoomForm.get('userName').hasError('minlength')">Minimum 3
             characters are required</span>
-          <span class="error-message" *ngIf="joinFormControls.userName.errors?.maxLength && submitted == true">Maximum
+          <span class="error-message" *ngIf="joinRoomForm.get('userName').hasError('maxlength') && submitted == true">Maximum
             12 characters are allowed</span>
         </div>
 
@@ -39,13 +39,17 @@
           <input id="icon_play" formControlName="roomId" [(ngModel)]="roomId" required minlength="4" maxlength="4"
             name="roomId" type="text">
           <label for="icon_play">Room ID</label>
-          <span class="error-message" *ngIf="joinFormControls.roomId.invalid && submitted == true">Enter valid 4 digit
+          <span class="error-message" *ngIf="joinFormControls.roomId.invalid && joinFormControls.roomId.touched && submitted == true">Enter valid 4 digit
             room id.</span>
           <span class="error-message" *ngIf="joinFormControls.roomId.errors?.required && submitted == true">Room id is
             required.</span>
 
         </div>
-
+        <div class="col s8 offset-s2 m6 offset-m3 l6 offset-l3">
+        <span class="error-message center-align" id="roomIdInvalidError" *ngIf="roomIdInvalidError">
+          RoomId is not valid or expired, create a new room to play.
+        </span>
+        </div>
         <button class="btn waves-effect waves-light col s8 offset-s2 m4 offset-m4 l4 offset-l4" id="startButton"
           type="submit" name="action" (click)="submitted =true; validateForm()">Start
           <i class="material-icons right">send</i>

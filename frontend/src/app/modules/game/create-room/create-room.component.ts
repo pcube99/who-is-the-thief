@@ -30,7 +30,7 @@ export class CreateRoomComponent implements OnInit {
   ngOnInit(): void {
     this.loading = false;
     this.submitted = false;
-    this.shareLink = "You have been invited to play *Who is the theif?* \n \n" +
+    this.shareLink = "You have been invited to play *Who is the thief?* \n \n" +
       "Click below link to join the room and start playing. \n \n" +
       "https://whoisthetheif.web.app/app/play?roomId=f153";
       this.shareLink = encodeURI(this.shareLink);
@@ -39,12 +39,14 @@ export class CreateRoomComponent implements OnInit {
     this.createForm();
     $(document).ready(function(){
       $('select').formSelect();
+      $('select').css("color" , "black");
+
     })
   }
 
   createForm() {
     this.createRoomForm = this.fb.group({
-      roomName: new FormControl('', [Validators.required, Validators.minLength(3)]),
+      roomName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]),
       numberOfRounds: new FormControl('', [Validators.required]),
     });
   }
@@ -54,6 +56,7 @@ export class CreateRoomComponent implements OnInit {
   }
   validateForm() {
     if(this.createRoomFormControls.roomName.valid && this.createRoomFormControls.numberOfRounds.valid) {
+      this.createRoom()
       return true;
     } else {
       return false;
@@ -62,8 +65,8 @@ export class CreateRoomComponent implements OnInit {
 
   createRoom() {
     this.loading = true;
-    console.log('this.roomName' + this.roomName + " this.numberOfRounds " + this.numberOfRounds);
-    this.baseUrl = "http://54.87.54.255/rooms?room_name="+ this.roomName + "&rounds=" + this.numberOfRounds;
+    console.log('this.roomName' + this.createRoomFormControls.roomName.value + " this.numberOfRounds " + this.createRoomFormControls.numberOfRounds.value);
+    this.baseUrl = "http://54.87.54.255/rooms?room_name="+ this.createRoomFormControls.roomName.value + "&rounds=" + this.createRoomFormControls.numberOfRounds.value;
     this.http.post( this.baseUrl, { title: 'Angular POST Request Example' }).subscribe({
     next: data => {
       console.log(data);
@@ -85,9 +88,11 @@ export class CreateRoomComponent implements OnInit {
 
   detectOffline() {
     if(navigator.onLine) {
-      document.documentElement.style.backgroundColor = '#ebe8e4';
+      console.log('online');
+      document.body.style.backgroundColor = '#ebe8e4';
     } else {
-      document.documentElement.style.backgroundColor = 'red';
+      console.log('offline');
+      document.body.style.backgroundColor = 'red';
     }
   }
 

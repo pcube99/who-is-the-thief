@@ -9,38 +9,36 @@
             <div class="row" id="content">
                 <div class="input-field col s12 m6 offset-m3 l6 offset-l3">
                     <i class="material-icons prefix">sort_by_alpha</i>
-                    <input id="icon_prefix" formControlName="roomName" [(ngModel)]="roomName" required minlength="3" maxlength="30"
-                        name="roomName" type="text" class="validate">
+                    <input id="icon_prefix" formControlName="roomName"
+                        name="roomName" type="text">
                     <label for="icon_prefix">Room name</label>
+                    <span class="error-message" *ngIf="createRoomForm.get('roomName').hasError('maxlength') && submitted == true "> Max 30 characters are allowed</span>
+                    <span class="error-message" *ngIf="createRoomForm.get('roomName').hasError('minlength') && submitted == true"> Min 3 characters are needed</span>
                     <span class="error-message" *ngIf="createRoomFormControls.roomName.errors?.required && submitted == true">Required</span>
-                    <span class="error-message" *ngIf="createRoomFormControls.roomName.errors?.maxLength && submitted == true"> Max 30 characters are allowed</span>
-                    <span class="error-message" *ngIf="createRoomFormControls.roomName.errors?.minLength && submitted == true"> Min 3 characters are needed</span>
 
                 </div>
 
                 <div class="input-field col s12 m6 offset-m3 l6 offset-l3">
                     <i class="material-icons prefix">schedule</i>
-                        <select formControlName="numberOfRounds" required [(ngModel)]="numberOfRounds">
+                        <select formControlName="numberOfRounds" required>
                           <option value="" disabled selected>Number of Rounds</option>
-                          <option value="6">Six</option>
-                          <option value="7">Seven</option>
-                          <option value="8">Eight</option>
-                          <option value="9">Nine</option>
-                          <option value="10">Ten</option>
+                          <option value="6" class="opt">Six</option>
+                          <option value="7" class="opt">Seven</option>
+                          <option value="8" class="opt">Eight</option>
+                          <option value="9" class="opt">Nine</option>
+                          <option value="10" class="opt">Ten</option>
 
                         </select>        
                     <span class="error-message" *ngIf="createRoomFormControls.numberOfRounds.errors?.required && submitted == true">select one of the option</span>
 
                 </div>
 
-                <div class="input-field col s6 offset-s3 m6 offset-m3">
-                    <a class="waves-effect waves-light btn-small" id="createButton" (click)="validateForm(); createRoom(); submitted=true;">
+                    <a class="col s6 offset-s3 m4 offset-m4 l4 offset-l4 center-align btn-block waves-effect waves-light btn-small" id="createButton" (click)=" submitted=true; validateForm();">
                         <i class="material-icons right">create</i> <strong>Create</strong>
                     </a>
-                    <a class="waves-effect waves-light btn-small" id="shareButton" href='https://api.whatsapp.com/send?text={{this.shareLink}}'>
+                    <a class="col s6 offset-s3 m4 offset-m4 l4 offset-l4 center-align btn-block waves-effect waves-light btn-small" id="shareButton" href='https://api.whatsapp.com/send?text={{this.shareLink}}'>
                         <i class="material-icons right">share</i> <strong> Share</strong>
                     </a>
-                </div>
             </div>
         </form>
     </div>

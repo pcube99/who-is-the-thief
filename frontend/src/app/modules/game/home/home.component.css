@@ -1,48 +1,26 @@
 #create {
-    width: 45%;
     background-color: #34ad54;
-    margin: 5% 30%;
     font-weight: bold;
+    margin-top: 5%;
 }
 
 #join {
-    width: 45%;
     background-color: #2a9ac7;
-    margin: 5% 30%;
     font-weight: bold;
+    margin-top: 5%;
 }
 
 #title {
   margin: 10% auto;
 }
 
-.wrapWord {
-  word-wrap: break-word;
-}
 
-@media(min-width: 900px) {
-  #create {
-    margin: 2% 30% !important;
-}
-
-#join {
-    margin: 2% 30% !important;
+.btn-block {
+  width: 50%;
 }
 
 #title {
   margin: 5% auto !important;
-}
-}
-@media(max-width: 600px) {
-  .wrapWord {
-    font-size: 15px;
-    padding: 0%;
-  }
-
-  .btn, .btn-large {
-    margin: 0 auto;
-    word-wrap: break-word;
-  }
 }
 
 .footer {

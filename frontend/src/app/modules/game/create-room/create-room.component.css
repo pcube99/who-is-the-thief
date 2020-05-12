@@ -1,10 +1,13 @@
 #createButton {
-    margin: 5% 15%;
-    width: auto;
+    font-weight: bold;
+    margin-top: 5%;
+    background-color: #34ad54;
+
 }
 #shareButton {
-    margin: 5% 15%;
-    width: auto;
+    font-weight: bold;
+    margin-top: 5%;
+    background-color: #2a9ac7;
 }
 
 .error-message {
@@ -16,15 +19,20 @@
     margin-top: 5%;
 }
 @media(max-width: 426px) {
-    #createButton {
-        margin: 5% 15%;
-        width: 70%;
-    }
-    #shareButton {
-        margin: 5% 15%;
-        width: 70%;
-    }
     #content {
         margin-top: 10% !important;
     }
 }   
+
+.btn-block {
+    width: 50%;
+}
+
+select {
+    color: black !important;
+    background-color: red !important;
+}
+.opt {
+    color: black !important;
+    background-color: red !important;
+}
