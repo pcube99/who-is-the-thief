@@ -22,4 +22,6 @@ public class PlayerInfo {
     private String playerId ;
     @JsonProperty("ready")
     private Boolean isReady;
+    @JsonProperty("profile_pic")
+    private String profilePic ;
 }

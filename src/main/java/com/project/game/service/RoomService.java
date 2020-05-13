@@ -5,7 +5,6 @@ import com.project.game.models.PlayerInfo;
 import com.project.game.models.Room;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,23 +22,31 @@ public class RoomService {
         this.roomDaoImpl = roomDaoImpl;
     }
 
-    public ResponseEntity<Room> findRoom(String roomCode) throws Exception {
+    public Room findRoom(String roomCode) throws Exception {
         return roomDaoImpl.findRoom(roomCode);
     }
 
-    public ResponseEntity<Room> createRoom(String roomName, Integer noOfRounds) throws Exception {
+    public Room createRoom(String roomName, Integer noOfRounds) throws Exception {
         return roomDaoImpl.createRoom(roomName, noOfRounds);
     }
 
-    public ResponseEntity<String> joinRoom(String roomCode, String playerName) throws Exception {
-        return roomDaoImpl.joinRoom(roomCode, playerName);
+    public String joinRoom(String roomCode, String playerName, String profilePic) throws Exception {
+        return roomDaoImpl.joinRoom(roomCode, playerName, profilePic);
     }
 
-    public ResponseEntity<List<PlayerInfo>> updatePoints(String roomCode, Integer points, String playerId) throws Exception {
+    public List<PlayerInfo> updatePoints(String roomCode, Integer points, String playerId) throws Exception {
         return roomDaoImpl.updatePoints(roomCode, points, playerId);
     }
 
-    public ResponseEntity<Boolean> checkAllReady(String roomCode, String playerId) throws Exception {
-        return  roomDaoImpl.checkAllReady(roomCode, playerId);
+    public Boolean checkAllReady(String roomCode, String playerId) throws Exception {
+        return roomDaoImpl.checkAllReady(roomCode, playerId);
+    }
+
+    public List<String> tossChits() {
+        return roomDaoImpl.tossChits();
+    }
+
+    public Boolean updateStatus(String roomCode, String playerId) throws Exception {
+        return roomDaoImpl.updateStatus(roomCode, playerId);
     }
 }

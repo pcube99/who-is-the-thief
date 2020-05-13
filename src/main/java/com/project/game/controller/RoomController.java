@@ -1,18 +1,25 @@
 package com.project.game.controller;
 
+import com.project.game.models.BaseMessageResponse;
 import com.project.game.models.PlayerInfo;
 import com.project.game.models.Room;
 import com.project.game.service.RoomService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 /**
  * Created by havyapanchal on 24 Apr, 2020 , 7:16 PM
  */
-
+@Slf4j
 @RestController
 @RequestMapping("/rooms")
 public class RoomController {
@@ -25,32 +32,86 @@ public class RoomController {
 
     @CrossOrigin
     @GetMapping("/{room_code}")
-    public ResponseEntity<Room> findRoom(@PathVariable("room_code") String roomCode) throws Exception {
-        return roomService.findRoom(roomCode);
+    public BaseMessageResponse findRoom(@PathVariable("room_code") String roomCode) throws Exception {
+        try {
+            Room room = roomService.findRoom(roomCode);
+            return new BaseMessageResponse(room);
+        } catch (Exception e) {
+            log.error("Failed in find room endpoint, e - {}", e.getMessage());
+            throw e;
+        }
     }
 
     @CrossOrigin
     @PostMapping
-    public ResponseEntity<Room> createRoom(@RequestParam("room_name") String roomName, @RequestParam("rounds") Integer noOfRounds) throws Exception {
-        return roomService.createRoom(roomName, noOfRounds);
+    public BaseMessageResponse createRoom(@RequestParam("room_name") String roomName, @RequestParam("rounds") Integer noOfRounds) throws Exception {
+        try {
+            Room room = roomService.createRoom(roomName, noOfRounds);
+            return new BaseMessageResponse(room);
+        } catch (Exception e) {
+            log.error("Failed in create room endpoint, e - {}", e.getMessage());
+            throw e;
+        }
     }
 
     @CrossOrigin
     @GetMapping
-    public ResponseEntity<String> joinRoom(@RequestParam("room_code") String roomCode, @RequestParam("player_name") String playerName) throws Exception {
-        return roomService.joinRoom(roomCode, playerName);
+    public BaseMessageResponse joinRoom(@RequestParam("room_code") String roomCode, @RequestParam("player_name") String playerName, @RequestParam("profile_pic") String profilePic) throws Exception {
+        try {
+            String playerId = roomService.joinRoom(roomCode, playerName, profilePic);
+            return new BaseMessageResponse(playerId);
+        } catch (Exception e) {
+            log.error("Failed in join-room endpoint, e - {}", e.getMessage());
+            throw e;
+        }
     }
 
     @CrossOrigin
     @PostMapping("/update-score")
-    public ResponseEntity<List<PlayerInfo>> updatePoints(@RequestParam("room_code") String roomCode, @RequestParam("points") Integer points , @RequestParam("player_id") String playerId) throws Exception {
-        return roomService.updatePoints(roomCode,points,playerId);
+    public BaseMessageResponse updatePoints(@RequestParam("room_code") String roomCode, @RequestParam("points") Integer points, @RequestParam("player_id") String playerId) throws Exception {
+
+        try {
+            List<PlayerInfo> playerInfoList = roomService.updatePoints(roomCode, points, playerId);
+            return new BaseMessageResponse(playerInfoList);
+        } catch (Exception e) {
+            log.error("Failed in update-score endpoint, e - {}", e.getMessage());
+            throw e;
+        }
     }
 
     @CrossOrigin
     @GetMapping("/all-ready")
-    public ResponseEntity<Boolean> checkAllReady(@RequestParam("room_code") String roomCode, @RequestParam("player_id") String playerId) throws Exception
-    {
-        return roomService.checkAllReady(roomCode,playerId);
+    public BaseMessageResponse checkAllReady(@RequestParam("room_code") String roomCode, @RequestParam("player_id") String playerId) throws Exception {
+        try {
+            Boolean flag = roomService.checkAllReady(roomCode, playerId);
+            return new BaseMessageResponse(flag);
+        } catch (Exception e) {
+            log.error("Failed in all-ready endpoint, e - {}", e.getMessage());
+            throw e;
+        }
+    }
+
+    @CrossOrigin
+    @GetMapping("/toss-chits")
+    public BaseMessageResponse tossChits() {
+        try {
+            List<String> roles = roomService.tossChits();
+            return new BaseMessageResponse(roles);
+        } catch (Exception e) {
+            log.error("Failed in toss-chits endpoint, e - {}", e.getMessage());
+            throw e;
+        }
+    }
+
+    @CrossOrigin
+    @PostMapping("/update-status")
+    public BaseMessageResponse updateStatus(@RequestParam("room_code") String roomCode, @RequestParam("player_id") String playerId) throws Exception {
+        try {
+            Boolean flag = roomService.updateStatus(roomCode, playerId);
+            return new BaseMessageResponse(flag);
+        } catch (Exception e) {
+            log.error("Failed in update-status endpoint, e - {}", e.getMessage());
+            throw e;
+        }
     }
 }
