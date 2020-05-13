@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FormGroup, Validators, FormControl, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
+import { environment } from '../../../../environments/environment';
 declare let $: any;
 @Component({
   selector: 'app-create-room',
@@ -9,7 +10,7 @@ declare let $: any;
   styleUrls: ['./create-room.component.css']
 })
 export class CreateRoomComponent implements OnInit {
-  baseUrl: any;
+  url: any;
   createRoomForm: FormGroup;
   result: any;
   selectedProfile: any;
@@ -66,8 +67,8 @@ export class CreateRoomComponent implements OnInit {
   createRoom() {
     this.loading = true;
     console.log('this.roomName' + this.createRoomFormControls.roomName.value + " this.numberOfRounds " + this.createRoomFormControls.numberOfRounds.value);
-    this.baseUrl = "http://54.87.54.255/rooms?room_name="+ this.createRoomFormControls.roomName.value + "&rounds=" + this.createRoomFormControls.numberOfRounds.value;
-    this.http.post( this.baseUrl, { title: 'Angular POST Request Example' }).subscribe({
+    this.url = environment.baseUrl + "?room_name="+ this.createRoomFormControls.roomName.value + "&rounds=" + this.createRoomFormControls.numberOfRounds.value;
+    this.http.post( this.url, { title: 'Angular POST Request Example' }).subscribe({
     next: data => {
       console.log(data);
       this.result = data;

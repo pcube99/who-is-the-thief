@@ -1,0 +1,11 @@
+.circle {
+    width: 50px;
+}
+
+.collection-item > span {
+    margin-left: 3%;
+}
+
+.winnerPlayer {
+    background-color: aquamarine;
+}

@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  baseUrl: "https://who-is-the-thief.app.com/rooms"
 };

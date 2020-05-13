@@ -12,6 +12,7 @@ import { ScoreboardComponent } from './scoreboard/scoreboard.component';
 import { OtherPlayersComponent } from './other-players/other-players.component';
 import { WaitingLobbyComponent } from './waiting-lobby/waiting-lobby.component';
 import { ErrorPageComponent } from './error-page/error-page.component';
+import { FinalScoreboardComponent } from './final-scoreboard/final-scoreboard.component';
 
 
 
@@ -27,6 +28,7 @@ import { ErrorPageComponent } from './error-page/error-page.component';
     OtherPlayersComponent,
     WaitingLobbyComponent,
     ErrorPageComponent,
+    FinalScoreboardComponent,
     
     
   ],

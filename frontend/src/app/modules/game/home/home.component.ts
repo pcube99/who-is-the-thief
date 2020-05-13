@@ -15,17 +15,6 @@ export class HomeComponent implements OnInit {
   }
 
   createRoom() {
-    // const header_obj = {
-    //   'Content-Type': 'application/json',
-    // };
-    // this.baseUrl = "http://54.87.54.255/rooms?room_name=Raja_ka_Kamra&rounds=4 ";
-    // const promise = this.http.post(this.baseUrl , { headers: header_obj
-    //   , observe: 'response' }).toPromise();
-    // promise.then((res) => {
-    //   console.log("res " + JSON.stringify(res));
-    // }).catch((err) => {
-    //   console.log(err);
-    // })
     this.router.navigate(['app/createRoom']);
   }
 

@@ -6,5 +6,6 @@ import { Injectable } from '@angular/core';
 export class RestService {
   result: any;
   baseUrl: any;
+  waitTimer: any;
   constructor() { }
 }

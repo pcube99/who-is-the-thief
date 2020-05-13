@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import Swal from 'sweetalert2';
 import { Router, ActivatedRoute } from '@angular/router';
 declare let $: any;
 import * as _ from 'lodash';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
+
 @Component({
   selector: 'app-play',
   templateUrl: './play.component.html',
@@ -11,15 +13,18 @@ import { HttpClient } from '@angular/common/http';
 })
 export class PlayComponent implements OnInit {
   waiting: any;
+  playerRoles: any;
+  playerRole: any;
+  selectedPlayer: any;
   error: any;
   loading: any;
-  baseUrl: any;
+  url: any;
   roomId: any;
   roomData: any;
   playersJoined: any;
   currentPlayerId: any;
   players: any;
-  waitTimer: any;
+  playerRoleImage: any;
   constructor(private router: Router,
     private http: HttpClient,
     private route: ActivatedRoute) { 
@@ -28,9 +33,11 @@ export class PlayComponent implements OnInit {
       });
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
     // Swal.fire('Each player have a limited amount of time to select the choice.')
     this.waiting = false;
+    this.playerRoles = [];
+    console.log('this.waiting ' + this.waiting);
     this.error = true;
     this.loading = true;
     this.currentPlayerId = localStorage.getItem('playerId');
@@ -38,9 +45,10 @@ export class PlayComponent implements OnInit {
     this.players = [];
     this.getRoomInfo();
 
-    // $(document).ready(() => {
-    //   $('.fixed-action-btn').floatingActionButton();
-    // });   
+    $(document).ready(() => {
+      console.log('fixed');
+      $('.fixed-action-btn').floatingActionButton();
+    });   
   }
  
   exitGamePopup() {
@@ -62,17 +70,17 @@ export class PlayComponent implements OnInit {
     this.loading = true;
     // this.roomId = '6458';
     console.log(" this.roomId " + this.roomId);
-    this.baseUrl = "http://54.87.54.255/rooms/" + this.roomId;
-    await this.http.get(this.baseUrl).toPromise()
+    this.url = environment.baseUrl + "/" + this.roomId;
+    await this.http.get(this.url).toPromise()
       .then(data => {
         this.roomData = data;
         console.log('pp ' + JSON.stringify(this.roomData));
         this.loading = false;
         this.playersJoined = this.roomData.player_info.length;
         console.log('roomData ' + this.playersJoined);
-    
-        for(let i=0; i<this.playersJoined;i++) {
-          if(this.currentPlayerId == this.roomData.player_info[i].player_id) {
+
+        for (let i = 0; i < this.playersJoined; i++) {
+          if (this.currentPlayerId == this.roomData.player_info[i].player_id) {
             continue;
           }
           this.players.push(this.roomData.player_info[i]);
@@ -83,47 +91,52 @@ export class PlayComponent implements OnInit {
         console.error('There was an error!', error);
         this.loading = false;
       });
-      this.waitTimer = setInterval( this.isWaiting, 5000);
-      console.log(" this.roomId after " + this.roomId + this.waitTimer);
-      if (this.playersJoined < 2) {
-        this.waiting = true;
-      } else {
-        this.waiting = false;
-        clearInterval(this.waitTimer);
-        return;
-      }
+    var waitTimer = setInterval(() => {
+      console.log("iswaiting" + this.roomId);
+      this.url = environment.baseUrl + "/" + this.roomId;
+      this.http.get(this.url).toPromise()
+        .then(data => {
+          this.roomData = data;
+          this.playersJoined = this.roomData.player_info.length;
+          console.log('roomData ' + this.playersJoined);
+          if (this.playersJoined < 4) {
+            console.log("sanjay 1")
+            this.waiting = true;
+            console.log('this.waiting ' + this.waiting);
+          } else {
+            for (let i = 0; i < 4; i++) {
+              if (this.currentPlayerId == this.roomData.player_info[i].player_id) {
+                continue;
+              }
+              this.players.push(this.roomData.player_info[i]);
+            }
+            window.location.reload();
+            console.log(this.players);
+            console.log('waitTimer ' + waitTimer)
+            clearInterval(waitTimer);
+            console.log("time clear 11" + this.waiting + " " + this.playersJoined+ " err "+ this.error);
+            this.waiting = false;
+            console.log("time clear 22 " + this.waiting + " " + this.playersJoined);
+          }
+        }).
+        catch(error => {
+          console.error('There was an error!', error);
+        });
+    }, 5000);
+    console.log(" this.roomId after " + this.roomId + " - " + waitTimer + " " + this.playersJoined);
+    if (this.playersJoined < 4) {
+      console.log("sanjay")
+      this.waiting = true;
+      console.log('this.waiting ' + this.waiting);
+    } else {
+      console.log('kuniya')
+      this.waiting = false;
+      console.log('this.waiting ' + this.waiting);
+      clearInterval(waitTimer);
+      return;
+    }
   }
 
-  test() {
-    console.log('test');
-  }
-
-  isWaiting(roomId) {
-    console.log("iswaiting" + roomId);
-    this.baseUrl = "http://54.87.54.255/rooms/1a28";
-    this.http.get(this.baseUrl).subscribe({
-      next(data){
-        this.roomData = data;
-        this.playersJoined = this.roomData.player_info.length;
-        console.log('roomData ' + this.playersJoined);
-        if (this.playersJoined < 2) {
-          this.waiting = true;
-        } else {
-          this.waiting = false;
-          clearInterval(this.waitTimer);
-          console.log("time clear " + this.waiting);
-          return;
-        }
-      },
-      error(error) {
-        console.error('There was an error!', error);
-      }
-    });
-    
-  }
-  playerStatus() {
-    $('#player1').css('border', '2px solid red');
-  }
   exitGame() {
     this.router.navigate(['app/home']);
   }
@@ -132,19 +145,37 @@ export class PlayComponent implements OnInit {
   tossCheats() {
     // this.playerStatus();
     const roles = ["Raja", "Chor", "Sipahi", "Mantri"];
-    console.log(_.sampleSize( roles, 4));
+    this.playerRoles = _.sampleSize( roles, 4);
+    console.log('this.playerRoles[3] ' + this.playerRoles[3] + " " + this.playerRoles );
     $('#player1').addClass("pulse-button");
     $('#player2').addClass("pulse-button");
     $('#player3').addClass("pulse-button");
     $('#bluff').addClass('disabled');
     $('#reveal').addClass('disabled');
+    if(this.playerRoles[3] === "Raja") {
+      this.playerRole = "Raja";
+      this.playerRoleImage = "raja";
+    } else if(this.playerRoles[3] === "Chor") {
+      this.playerRole = "Chor";
+      this.playerRoleImage = "chor";
+    } else if(this.playerRoles[3] === "Sipahi") {
+      this.playerRole = "Sipahi";
+      this.playerRoleImage = "sipahi";
+    } else if(this.playerRoles[3] === "Mantri") {
+      this.playerRole = "Mantri";
+      this.playerRoleImage = "vajir";
+    } 
   }
 
   choosenPlayer(index) {
     console.log(index);
-    $('#player1').removeClass("pulse-button");
-    $('#player2').removeClass("pulse-button");
-    $('#player3').removeClass("pulse-button");
+    if(this.selectedPlayer == undefined) {
+      this.selectedPlayer = index;
+      $('#player' + index).css('border', '2px solid black');
+      $('#player1').removeClass("pulse-button");
+      $('#player2').removeClass("pulse-button");
+      $('#player3').removeClass("pulse-button");
+    }
   }
 
 }
