@@ -1,7 +1,6 @@
-package com.project.game.models;
+package com.project.game.models.pojos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,22 +19,16 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document
+@Document(value = "room")
 public class Room {
     @Id
     private String id ;
     @JsonProperty("room_code")
-    @SerializedName("room_code")
     private String roomCode = "" ;
     @JsonProperty("room_name")
-    @SerializedName("room_name")
     private String roomName = "";
     @JsonProperty("player_info")
-    @SerializedName("player_info")
     private List<PlayerInfo> playersInfo = new ArrayList<>();
-    @JsonProperty("no_of_rounds")
-    @SerializedName("no_of_rounds")
-    private Integer noOfRounds = 0 ;
 
 }
 

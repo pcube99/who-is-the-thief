@@ -1,4 +1,4 @@
-package com.project.game.models;
+package com.project.game.models.pojos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -20,8 +20,8 @@ public class PlayerInfo {
     private Integer score ;
     @JsonProperty("player_id")
     private String playerId ;
-    @JsonProperty("ready")
-    private Boolean isReady;
     @JsonProperty("profile_pic")
-    private String profilePic ;
+    private String profilePic;
+    @JsonProperty("is_ready")
+    private Boolean isReady;
 }

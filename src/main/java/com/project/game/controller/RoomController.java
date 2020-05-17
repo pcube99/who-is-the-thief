@@ -1,8 +1,9 @@
 package com.project.game.controller;
 
-import com.project.game.models.BaseMessageResponse;
-import com.project.game.models.PlayerInfo;
-import com.project.game.models.Room;
+import com.project.game.models.response.BaseMessageResponse;
+import com.project.game.models.pojos.PlayerInfo;
+import com.project.game.models.pojos.Room;
+import com.project.game.models.response.TossChitsResponse;
 import com.project.game.service.RoomService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by havyapanchal on 24 Apr, 2020 , 7:16 PM
@@ -83,22 +85,10 @@ public class RoomController {
     @GetMapping("/all-ready")
     public BaseMessageResponse checkAllReady(@RequestParam("room_code") String roomCode, @RequestParam("player_id") String playerId) throws Exception {
         try {
-            Boolean flag = roomService.checkAllReady(roomCode, playerId);
-            return new BaseMessageResponse(flag);
+            TossChitsResponse response = roomService.checkAllReady(roomCode, playerId);
+            return new BaseMessageResponse(response);
         } catch (Exception e) {
             log.error("Failed in all-ready endpoint, e - {}", e.getMessage());
-            throw e;
-        }
-    }
-
-    @CrossOrigin
-    @GetMapping("/toss-chits")
-    public BaseMessageResponse tossChits() {
-        try {
-            List<String> roles = roomService.tossChits();
-            return new BaseMessageResponse(roles);
-        } catch (Exception e) {
-            log.error("Failed in toss-chits endpoint, e - {}", e.getMessage());
             throw e;
         }
     }

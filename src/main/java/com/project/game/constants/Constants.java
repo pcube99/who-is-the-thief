@@ -5,4 +5,7 @@ package com.project.game.constants;
  */
 public class Constants {
     public static final String ROOM_CODE = "roomCode";
+    public static final String[] ROLES = {"Raja", "Wazir", "Chor", "Sipahi"};
+    public static final String COLLECTION_ROUND_MODEL = "round_model";
+    public static final String COLLECTION_ROOM_MODEL = "room";
 }
