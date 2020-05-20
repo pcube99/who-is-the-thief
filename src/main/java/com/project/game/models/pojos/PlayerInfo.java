@@ -1,6 +1,7 @@
 package com.project.game.models.pojos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,6 +22,7 @@ public class PlayerInfo {
     @JsonProperty("player_id")
     private String playerId ;
     @JsonProperty("profile_pic")
+    @SerializedName("profile_pic")
     private String profilePic;
     @JsonProperty("is_ready")
     private Boolean isReady;

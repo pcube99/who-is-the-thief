@@ -69,19 +69,6 @@ public class RoomController {
     }
 
     @CrossOrigin
-    @PostMapping("/update-score")
-    public BaseMessageResponse updatePoints(@RequestParam("room_code") String roomCode, @RequestParam("points") Integer points, @RequestParam("player_id") String playerId) throws Exception {
-
-        try {
-            List<PlayerInfo> playerInfoList = roomService.updatePoints(roomCode, points, playerId);
-            return new BaseMessageResponse(playerInfoList);
-        } catch (Exception e) {
-            log.error("Failed in update-score endpoint, e - {}", e.getMessage());
-            throw e;
-        }
-    }
-
-    @CrossOrigin
     @GetMapping("/all-ready")
     public BaseMessageResponse checkAllReady(@RequestParam("room_code") String roomCode, @RequestParam("player_id") String playerId) throws Exception {
         try {
@@ -103,5 +90,12 @@ public class RoomController {
             log.error("Failed in update-status endpoint, e - {}", e.getMessage());
             throw e;
         }
+    }
+
+    @CrossOrigin
+    @PostMapping("/evaluate-scores")
+    public Object evaluateScores(@RequestParam("room_code") String roomCode, @RequestParam("player_id") String currentPlayerId, //@RequestParam("is_taking_risk") Boolean takeRisk,
+                                 @RequestParam("choice") String selectedPlayerId) throws Exception {
+        return roomService.evaluateScores(roomCode,currentPlayerId,selectedPlayerId);
     }
 }

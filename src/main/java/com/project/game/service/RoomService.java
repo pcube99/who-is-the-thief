@@ -142,6 +142,7 @@ public class RoomService {
             }
             i++;
         }
+        log.info("list: {}", players );
         room.setPlayersInfo(players);
         mongoTemplate.save(room);
         log.info("Returning flag : {}", flag);
@@ -169,7 +170,7 @@ public class RoomService {
         List<String> playerIds = new ArrayList<>();
 
         for (PlayerInfo playerInfo : playerInfoList) {
-            playerIds.add(playerInfo.getName());
+            playerIds.add(playerInfo.getPlayerId());
         }
         for (int i = 0; i < playerInfoList.size(); i++) {
             PlayerRole playerRole = PlayerRole.builder().playerId(playerIds.get(i)).role(roles.get(i)).build();
@@ -193,6 +194,7 @@ public class RoomService {
 
         return TossChitsResponse.builder().roundNo(roundNo).playerRoles(playerRoles).success(true).build();
     }
+
     public Boolean updateStatus(String roomCode, String playerId) throws Exception {
         Room room = findRoom(roomCode);
         if (room == null || room.getPlayersInfo().size() < 4) {
@@ -231,5 +233,88 @@ public class RoomService {
             log.error("[resetReadyState] mongodb update operation failed, e - {}", e.getMessage());
             throw e;
         }
+    }
+
+    public Object evaluateScores(String roomCode, String currentPlayerId, String selectedPlayerId) throws Exception {
+        Room room = findRoom(roomCode);// to update global score
+        Query query = new Query();
+        query.addCriteria(Criteria.where(Constants.ROOM_CODE).is(roomCode));
+        RoundModel roundModel;
+        try {
+            roundModel = mongoTemplate.findOne(query, RoundModel.class);
+        } catch (Exception e) {
+            log.error("[evaluateScores] mongodb find operation failed, e - {}", e.getMessage());
+            throw e;
+        }
+        //TODO: null check
+        List<RoundInfo> roundInfo = roundModel.getRoundInfo();
+        List<PlayerRole> playerRoleList = roundInfo.get(roundInfo.size() - 1).getPlayerRoleList();
+        PlayerRole currentPlayerRole, selectedPlayerRole;
+        int currentPlayerIndex = playerRoleList.indexOf(currentPlayerId);
+        currentPlayerRole = playerRoleList.get(currentPlayerIndex);
+        int selectedPlayerIndex = playerRoleList.indexOf(selectedPlayerId);
+        selectedPlayerRole = playerRoleList.get(selectedPlayerIndex);
+
+        Integer chorIndex = getPlayer("Chor", playerRoleList);
+        System.out.println(currentPlayerRole.toString() + " " + selectedPlayerRole.toString());
+        List<RoundInfo> list = new ArrayList<>();
+        switch (currentPlayerRole.getRole()) {
+            case "Raja":
+     /*           if (takeRisk) {
+                    if (selectedPlayerRole.getRole().equals("Chor"))
+                        currentPlayerRole.setRoundScore(currentPlayerRole.getRoundScore() + 1200);
+                    else {
+                        currentPlayerRole.setRoundScore(currentPlayerRole.getRoundScore() + 700);
+                        selectedPlayerRole.setRoundScore(selectedPlayerRole.getRoundScore() + 300);
+                    }
+                } else {
+                    if (selectedPlayerRole.getRole().equals("Wazir"))
+                        currentPlayerRole.setRoundScore(currentPlayerRole.getRoundScore() + 1000);
+                    else {
+                        currentPlayerRole.setRoundScore(currentPlayerRole.getRoundScore() + 850);
+                        selectedPlayerRole.setRoundScore(selectedPlayerRole.getRoundScore() + 150);
+                    }
+                }*/
+                updateScoreInDb(roundModel, roundInfo, playerRoleList, currentPlayerRole, currentPlayerIndex, 1000);
+                break;
+            case "Wazir":
+                if (selectedPlayerRole.getRole().equals("Chor")) {
+                    updateScoreInDb(roundModel, roundInfo, playerRoleList, currentPlayerRole, currentPlayerIndex, 500);
+                } else {
+                    currentPlayerRole.setRoundScore(0);
+                    updateScoreInDb(roundModel, roundInfo, playerRoleList, currentPlayerRole, currentPlayerIndex, 0);
+                    updateScoreInDb(roundModel, roundInfo, playerRoleList, playerRoleList.get(chorIndex), currentPlayerIndex, 500);
+                }
+                break;
+            case "Chor":
+                updateScoreInDb(roundModel, roundInfo, playerRoleList, currentPlayerRole, currentPlayerIndex, 0);
+                break;
+            case "Sipahi":
+                updateScoreInDb(roundModel, roundInfo, playerRoleList, currentPlayerRole, currentPlayerIndex, 300);
+                break;
+            default:
+                break;
+        }
+        return "Success";
+    }
+
+    private void updateScoreInDb(RoundModel roundModel, List<RoundInfo> roundInfo, List<PlayerRole> playerRoleList, PlayerRole currentPlayerRole, int currentPlayerIndex, int score) {
+        List<RoundInfo> list;
+        currentPlayerRole.setRoundScore(score);
+        playerRoleList.set(currentPlayerIndex, currentPlayerRole);
+        roundInfo.get(roundInfo.size() - 1).setPlayerRoleList(playerRoleList);
+        list = roundInfo;
+        roundModel.setRoundInfo(list);
+        mongoTemplate.save(roundModel, "round_model");
+    }
+
+    public Integer getPlayer(String role, List<PlayerRole> playerRoleList) {
+        Map<Integer, PlayerRole> mp = new HashMap<>();
+        for (int k = 0; k < playerRoleList.size(); k++) {
+            if (playerRoleList.get(k).getRole().equals(role)) {
+                return k;
+            }
+        }
+        return null;
     }
 }

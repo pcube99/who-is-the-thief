@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class PlayerRole {
     private String playerId;
     private String role;
+    private int roundScore;
 }
