@@ -14,6 +14,7 @@ import { environment } from '../../../../environments/environment';
 export class PlayComponent implements OnInit {
   waiting: any;
   isReady: any;
+  isReadyLoader: any;
   playerRoles: any;
   playerRole: any;
   selectedPlayer: any;
@@ -26,15 +27,17 @@ export class PlayComponent implements OnInit {
   currentPlayerId: any;
   players: any;
   playerRoleImage: any;
-  constructor(private router: Router,
+  constructor(
+    private router: Router,
     private http: HttpClient,
-    private route: ActivatedRoute) { 
-      this.route.queryParams.subscribe(params => {
-        this.roomId = params['roomId'];
-      });
+    private route: ActivatedRoute) {
+    this.route.queryParams.subscribe(params => {
+      this.roomId = params['roomId'];
+    });
   }
 
   ngOnInit() {
+    this.isReadyLoader = false;
     this.isReady = false;
     // Swal.fire('Each player have a limited amount of time to select the choice.')
     this.waiting = false;
@@ -43,16 +46,16 @@ export class PlayComponent implements OnInit {
     this.error = true;
     this.loading = true;
     this.currentPlayerId = localStorage.getItem('playerId');
-    console.log("this.currentPlayerId " + this.currentPlayerId);
+    console.log('this.currentPlayerId ' + this.currentPlayerId);
     this.players = [];
     this.getRoomInfo();
 
     $(document).ready(() => {
       console.log('fixed');
       $('.fixed-action-btn').floatingActionButton();
-    });   
+    });
   }
- 
+
   exitGamePopup() {
     Swal.fire({
       title: 'Are you sure?',
@@ -65,14 +68,14 @@ export class PlayComponent implements OnInit {
       if (result.value) {
         this.exitGame();
       }
-    })
+    });
   }
 
   async getRoomInfo() {
     this.loading = true;
     // this.roomId = '6458';
-    console.log(" this.roomId " + this.roomId);
-    this.url = environment.baseUrl + "/" + this.roomId;
+    console.log(' this.roomId ' + this.roomId);
+    this.url = environment.baseUrl + '/' + this.roomId;
     await this.http.get(this.url).toPromise()
       .then(data => {
         this.roomData = data;
@@ -82,7 +85,7 @@ export class PlayComponent implements OnInit {
         console.log('roomData ' + this.playersJoined);
 
         for (let i = 0; i < this.playersJoined; i++) {
-          if (this.currentPlayerId == this.roomData.player_info[i].player_id) {
+          if (this.currentPlayerId === this.roomData.player_info[i].player_id) {
             continue;
           }
           this.players.push(this.roomData.player_info[i]);
@@ -93,45 +96,42 @@ export class PlayComponent implements OnInit {
         console.error('There was an error!', error);
         this.loading = false;
       });
-    var waitTimer = setInterval(() => {
-      console.log("iswaiting" + this.roomId);
-      this.url = environment.baseUrl + "/" + this.roomId;
+    const waitTimer = setInterval(() => {
+      console.log('iswaiting' + this.roomId);
+      this.url = environment.baseUrl + '/' + this.roomId;
       this.http.get(this.url).toPromise()
         .then(data => {
           this.roomData = data;
           this.playersJoined = this.roomData.player_info.length;
           console.log('roomData ' + this.playersJoined);
           if (this.playersJoined < 4) {
-            console.log("sanjay 1")
             this.waiting = true;
             console.log('this.waiting ' + this.waiting);
           } else {
             for (let i = 0; i < 4; i++) {
-              if (this.currentPlayerId == this.roomData.player_info[i].player_id) {
+              if (this.currentPlayerId === this.roomData.player_info[i].player_id) {
                 continue;
               }
               this.players.push(this.roomData.player_info[i]);
             }
             window.location.reload();
             console.log(this.players);
-            console.log('waitTimer ' + waitTimer)
+            console.log('waitTimer ' + waitTimer);
             clearInterval(waitTimer);
-            console.log("time clear 11" + this.waiting + " " + this.playersJoined+ " err "+ this.error);
+            console.log('time clear 11' + this.waiting + ' ' + this.playersJoined + ' err ' + this.error);
             this.waiting = false;
-            console.log("time clear 22 " + this.waiting + " " + this.playersJoined);
+            console.log('time clear 22 ' + this.waiting + ' ' + this.playersJoined);
           }
         }).
         catch(error => {
           console.error('There was an error!', error);
         });
     }, 5000);
-    console.log(" this.roomId after " + this.roomId + " - " + waitTimer + " " + this.playersJoined);
+    console.log(' this.roomId after ' + this.roomId + ' - ' + waitTimer + ' ' + this.playersJoined);
     if (this.playersJoined < 4) {
-      console.log("sanjay")
       this.waiting = true;
       console.log('this.waiting ' + this.waiting);
     } else {
-      console.log('kuniya')
       this.waiting = false;
       console.log('this.waiting ' + this.waiting);
       clearInterval(waitTimer);
@@ -143,41 +143,47 @@ export class PlayComponent implements OnInit {
     this.router.navigate(['app/home']);
   }
 
-  //TODO assign it to a variable
+  // TODO assign it to a variable
   tossCheats() {
     // this.playerStatus();
-    const roles = ["Raja", "Chor", "Sipahi", "Mantri"];
-    this.playerRoles = _.sampleSize( roles, 4);
-    console.log('this.playerRoles[3] ' + this.playerRoles[3] + " " + this.playerRoles );
-    $('#player1').addClass("pulse-button");
-    $('#player2').addClass("pulse-button");
-    $('#player3').addClass("pulse-button");
+    const roles = ['Raja', 'Chor', 'Sipahi', 'Mantri'];
+    this.playerRoles = _.sampleSize(roles, 4);
+    console.log('this.playerRoles[3] ' + this.playerRoles[3] + ' ' + this.playerRoles);
+    $('#player1').addClass('pulse-button');
+    $('#player2').addClass('pulse-button');
+    $('#player3').addClass('pulse-button');
     $('#bluff').addClass('disabled');
     $('#reveal').addClass('disabled');
-    if(this.playerRoles[3] === "Raja") {
-      this.playerRole = "Raja";
-      this.playerRoleImage = "raja";
-    } else if(this.playerRoles[3] === "Chor") {
-      this.playerRole = "Chor";
-      this.playerRoleImage = "chor";
-    } else if(this.playerRoles[3] === "Sipahi") {
-      this.playerRole = "Sipahi";
-      this.playerRoleImage = "sipahi";
-    } else if(this.playerRoles[3] === "Mantri") {
-      this.playerRole = "Mantri";
-      this.playerRoleImage = "vajir";
-    } 
+    if (this.playerRoles[3] === 'Raja') {
+      this.playerRole = 'Raja';
+      this.playerRoleImage = 'raja';
+    } else if (this.playerRoles[3] === 'Chor') {
+      this.playerRole = 'Chor';
+      this.playerRoleImage = 'chor';
+    } else if (this.playerRoles[3] === 'Sipahi') {
+      this.playerRole = 'Sipahi';
+      this.playerRoleImage = 'sipahi';
+    } else if (this.playerRoles[3] === 'Mantri') {
+      this.playerRole = 'Mantri';
+      this.playerRoleImage = 'vajir';
+    }
   }
 
   choosenPlayer(index) {
     console.log(index);
-    if(this.selectedPlayer == undefined) {
+    if (this.selectedPlayer == undefined) {
       this.selectedPlayer = index;
       $('#player' + index).css('border', '2px solid black');
-      $('#player1').removeClass("pulse-button");
-      $('#player2').removeClass("pulse-button");
-      $('#player3').removeClass("pulse-button");
+      $('#player1').removeClass('pulse-button');
+      $('#player2').removeClass('pulse-button');
+      $('#player3').removeClass('pulse-button');
     }
+  }
+
+  readyPlayer() {
+    this.isReady = true;
+    this.isReadyLoader = true;
+    console.log('asdasd');
   }
 
 }

@@ -8,14 +8,9 @@ declare let $: any;
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  ngOnInit(): void {
-  
-    // Or with jQuery
-    $(document).ready(function(){
-      $('.sidenav').sidenav();
-    });  
-  }
   title = 'my-game';
+  ngOnInit(): void {
+  }
 }
 
 

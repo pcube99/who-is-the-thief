@@ -4,12 +4,10 @@ import { HomeComponent } from './home/home.component';
 import { LoaderComponent } from './loader/loader.component';
 import { CreateRoomComponent } from './create-room/create-room.component';
 import { JoinRoomComponent } from './join-room/join-room.component';
-import { ProfileComponent } from './profile/profile.component';
-import { ReactiveFormsModule ,FormsModule} from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { PlayComponent } from './play/play.component';
 import { ScoreboardComponent } from './scoreboard/scoreboard.component';
-import { OtherPlayersComponent } from './other-players/other-players.component';
 import { WaitingLobbyComponent } from './waiting-lobby/waiting-lobby.component';
 import { ErrorPageComponent } from './error-page/error-page.component';
 import { FinalScoreboardComponent } from './final-scoreboard/final-scoreboard.component';
@@ -22,15 +20,13 @@ import { FinalScoreboardComponent } from './final-scoreboard/final-scoreboard.co
     LoaderComponent,
     CreateRoomComponent,
     JoinRoomComponent,
-    ProfileComponent,
     PlayComponent,
     ScoreboardComponent,
-    OtherPlayersComponent,
     WaitingLobbyComponent,
     ErrorPageComponent,
     FinalScoreboardComponent,
-    
-    
+
+
   ],
   imports: [
     CommonModule,
@@ -43,11 +39,9 @@ import { FinalScoreboardComponent } from './final-scoreboard/final-scoreboard.co
     LoaderComponent,
     CreateRoomComponent,
     JoinRoomComponent,
-    ProfileComponent,
     ReactiveFormsModule,
     PlayComponent,
     ScoreboardComponent,
-    OtherPlayersComponent,
     WaitingLobbyComponent,
   ]
 })

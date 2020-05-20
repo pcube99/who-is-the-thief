@@ -20,29 +20,28 @@ export class CreateRoomComponent implements OnInit {
   shareLink1: any;
   submitted: any;
   loading: any;
-  constructor(private http: HttpClient,
+  constructor(
+    private http: HttpClient,
     private fb: FormBuilder,
     private router: Router) {
-      window.addEventListener('load', this.detectOffline);
-      window.addEventListener('online', this.detectOffline);
-      window.addEventListener('offline', this.detectOffline);
-    }
+    window.addEventListener('load', this.detectOffline);
+    window.addEventListener('online', this.detectOffline);
+    window.addEventListener('offline', this.detectOffline);
+  }
 
   ngOnInit(): void {
     this.loading = false;
     this.submitted = false;
-    this.shareLink = "You have been invited to play *Who is the thief?* \n \n" +
-      "Click below link to join the room and start playing. \n \n" +
-      "https://whoisthetheif.web.app/app/play?roomId=f153";
-      this.shareLink = encodeURI(this.shareLink);
-      console.log(this.shareLink);
+    this.shareLink = 'You have been invited to play *Who is the thief?* \n \n' +
+      'Click below link to join the room and start playing. \n \n' +
+      'https://whoisthetheif.web.app/app/play?roomId=f153';
+    this.shareLink = encodeURI(this.shareLink);
+    console.log(this.shareLink);
     this.selectedProfile = true;
     this.createForm();
-    $(document).ready(function(){
+    $(document).ready(() => {
       $('select').formSelect();
-      $('select').css("color" , "black");
-
-    })
+    });
   }
 
   createForm() {
@@ -56,8 +55,8 @@ export class CreateRoomComponent implements OnInit {
     return this.createRoomForm.controls;
   }
   validateForm() {
-    if(this.createRoomFormControls.roomName.valid && this.createRoomFormControls.numberOfRounds.valid) {
-      this.createRoom()
+    if (this.createRoomFormControls.roomName.valid && this.createRoomFormControls.numberOfRounds.valid) {
+      this.createRoom();
       return true;
     } else {
       return false;
@@ -66,29 +65,26 @@ export class CreateRoomComponent implements OnInit {
 
   createRoom() {
     this.loading = true;
-    console.log('this.roomName' + this.createRoomFormControls.roomName.value + " this.numberOfRounds " + this.createRoomFormControls.numberOfRounds.value);
-    this.url = environment.baseUrl + "?room_name="+ this.createRoomFormControls.roomName.value + "&rounds=" + this.createRoomFormControls.numberOfRounds.value;
-    this.http.post( this.url, { title: 'Angular POST Request Example' }).subscribe({
-    next: data => {
-      console.log(data);
-      this.result = data;
-      this.loading = false;
-      localStorage.setItem('roomId' , this.result.room_code );
-      this.router.navigate(['app/joinRoom']);
-    },
-    error: error =>  {
-      console.error('There was an error!', error);
-      this.loading = false;
-    }
-})
-  }
-
-  shareRoom() {
-    
+    console.log('this.roomName' + this.createRoomFormControls.roomName.value +
+      ' this.numberOfRounds ' + this.createRoomFormControls.numberOfRounds.value);
+    this.url = environment.baseUrl + '?room_name=' + this.createRoomFormControls.roomName.value +
+      '&rounds=' + this.createRoomFormControls.numberOfRounds.value;
+    this.http.post(this.url, { title: 'Create room post request' }).toPromise()
+      .then((data) => {
+        console.log(data);
+        this.result = data;
+        this.loading = false;
+        localStorage.setItem('roomId', this.result.room_code);
+        this.router.navigate(['app/joinRoom']);
+      })
+      .catch((err) => {
+        console.error('There was an error!', err);
+        this.loading = false;
+      });
   }
 
   detectOffline() {
-    if(navigator.onLine) {
+    if (navigator.onLine) {
       console.log('online');
       document.body.style.backgroundColor = '#ebe8e4';
     } else {

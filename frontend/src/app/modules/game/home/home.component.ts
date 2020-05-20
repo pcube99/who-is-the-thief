@@ -8,8 +8,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class HomeComponent implements OnInit {
   baseUrl: any;
-  constructor( private router: Router,
-    private http: HttpClient) { }
+  constructor( private router: Router) { }
 
   ngOnInit(): void {
   }

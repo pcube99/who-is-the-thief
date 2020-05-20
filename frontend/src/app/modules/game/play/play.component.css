@@ -22,6 +22,9 @@
 }
 .rd {
     margin-top: 25px;
+    background-color: #ed733f;
+    color: black !important;
+    font-weight: bolder !important;
 }
 .btn {
     margin: 3% 3%;
@@ -114,3 +117,7 @@ display: block;
   @-moz-keyframes pulse {to {box-shadow: 0 0 0 20px #ebbdb8;}}
   @-ms-keyframes pulse {to {box-shadow: 0 0 0 20px #ebbdb8;}}
   @keyframes pulse {to {box-shadow: 0 0 0 20px #ebbdb8;}}
+
+  .card-panel {
+      background-color: #ace6f6 !important;
+  }
