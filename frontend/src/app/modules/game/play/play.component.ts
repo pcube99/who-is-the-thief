@@ -13,6 +13,7 @@ import { environment } from '../../../../environments/environment';
 })
 export class PlayComponent implements OnInit {
   waiting: any;
+  isReady: any;
   playerRoles: any;
   playerRole: any;
   selectedPlayer: any;
@@ -34,6 +35,7 @@ export class PlayComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.isReady = false;
     // Swal.fire('Each player have a limited amount of time to select the choice.')
     this.waiting = false;
     this.playerRoles = [];

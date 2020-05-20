@@ -10,6 +10,19 @@
     margin: 0;
 }
 
+#readyButton {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    margin: 0;
+    width: 100%;
+    height: 15%;
+    background-color: #c4c3bc;
+    font-weight: bold;
+}
+.rd {
+    margin-top: 25px;
+}
 .btn {
     margin: 3% 3%;
 }
