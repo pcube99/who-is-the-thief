@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -122,6 +123,7 @@ public class RoomService {
         return list;
     }
 
+    @Async("asyncExecutor")
     public TossChitsResponse checkAllReady(String roomCode, String playerId) throws Exception {
         Room room = findRoom(roomCode);
         if (room == null) {
