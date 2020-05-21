@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  baseUrl: 'https://who-is-the-thief.herokuapp.com//rooms'
+  baseUrl: 'https://who-is-the-thief.herokuapp.com/rooms'
 };
 
 /*

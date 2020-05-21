@@ -10,6 +10,11 @@
     margin-top: 5%;
 }
 
+#butInstall {
+  margin-top: 5%;
+  background-color: #ed733f;
+  font-weight: bold;
+}
 #title {
   margin: 10% auto;
 }
@@ -28,7 +33,7 @@
   left: 0;
   bottom: 0;
   width: 100%;
-  background-color: #c4c3bc;
+  background-color: #ace6f6;
   text-align: center;
   font-weight: bold;
 }

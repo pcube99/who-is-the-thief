@@ -38,7 +38,7 @@
           <i class="material-icons prefix">play_arrow</i>
           <input id="icon_play" formControlName="roomId" [(ngModel)]="roomId" required minlength="4" maxlength="4"
             name="roomId" type="text">
-          <label for="icon_play">Room ID</label>
+          <label [ngClass]="{'active': roomId!=null }" for="icon_play">Room ID</label>
           <span class="error-message" *ngIf="joinFormControls.roomId.invalid && joinFormControls.roomId.touched && submitted == true">Enter valid 4 digit
             room id.</span>
           <span class="error-message" *ngIf="joinFormControls.roomId.errors?.required && submitted == true">Room id is

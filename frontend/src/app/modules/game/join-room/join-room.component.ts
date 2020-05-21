@@ -49,6 +49,13 @@ export class JoinRoomComponent implements OnInit {
     this.hideCarousel = true;
     this.selectedProfile = true;
     this.profilePicNumber = i;
+    if (localStorage.getItem('roomId') != null) {
+      this.roomId = localStorage.getItem('roomId');
+      $('#icon_play').click();
+
+      console.log('room id ' + this.roomId);
+      localStorage.removeItem('roomId');
+    }
   }
 
   createForm() {
@@ -74,14 +81,15 @@ export class JoinRoomComponent implements OnInit {
   joinRoom() {
     this.loading = true;
     console.log('this.userName' + this.userName + ' this.roomId ' + this.roomId);
-    this.url = environment.baseUrl + '?room_code=' + this.roomId + '&player_name=' + this.userName;
+    this.url = environment.baseUrl + '?room_code=' + this.roomId + '&player_name=' + this.userName 
+      + '&profile_pic=' + this.profilePicNumber;
     this.http.get(this.url, { responseType: 'text' }).subscribe({
       next: data => {
         console.log(data);
         this.loading = false;
         localStorage.setItem('playerId', data);
         this.router.navigate(['app/play'], { queryParams: { roomId: this.roomId } });
-      },
+      },  
       error: error => {
         console.error('There was an error!', error);
         this.roomIdInvalidError = true;
@@ -94,11 +102,6 @@ export class JoinRoomComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    if (localStorage.getItem('roomId') != null) {
-      $('#icon_play').click();
-      this.roomId = localStorage.getItem('roomId');
-      console.log('room id ' + this.roomId);
-      localStorage.removeItem('roomId');
-    }
+    
   }
 }

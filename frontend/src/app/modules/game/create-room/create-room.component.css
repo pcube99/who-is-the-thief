@@ -1,5 +1,5 @@
 #createButton {
-    font-weight: bold;
+    font-weight: bolder !important;
     margin-top: 5%;
     background-color: #34ad54;
 
