@@ -28,6 +28,9 @@ export class PlayComponent implements OnInit {
   players: any;
   playerRoleImage: any;
   result: any;
+  result1: any;
+  result2: any;
+  url1: any;
   constructor(
     private router: Router,
     private http: HttpClient,
@@ -150,7 +153,7 @@ export class PlayComponent implements OnInit {
     // const roles = ['Raja', 'Chor', 'Sipahi', 'Mantri'];
     // this.playerRoles = _.sampleSize(roles, 4);
     // console.log('this.playerRoles[3] ' + this.playerRoles[3] + ' ' + this.playerRoles);
-    
+
     if (this.playerRoles[3] === 'Raja') {
       this.playerRole = 'Raja';
       this.playerRoleImage = 'raja';
@@ -179,49 +182,77 @@ export class PlayComponent implements OnInit {
 
   async readyPlayer() {
     console.log(' this.roomId ' + this.roomId + " " + this.currentPlayerId);
-    this.url = environment.baseUrl + '/all-ready?room_code=' + this.roomId + '&player_id=' + this.currentPlayerId;
-    const readyTimer = setInterval(async () => {
-      await this.http.get(this.url).toPromise()
+    this.url = environment.baseUrl + '/update-status?room_code=' + this.roomId + '&player_id=' + this.currentPlayerId;
+    await this.http.post(this.url, { title: 'ready player post request' }, { responseType: 'text' }).toPromise()
       .then((res) => {
-        console.log(res);
+        console.log("ready response" + res);
         this.result = res;
-        if(this.result.success == false) {
-          this.isReadyLoader = true;
-          this.isReady = false;
-        } else {
-          this.isReadyLoader = false;
-          this.isReady = true;
-          for(let i=0; i <4;i++) {
-            if(this.result.playerRoles[i].playerId == this.currentPlayerId) {
-              let currentRole = this.result.playerRoles[i].role;
-              if (currentRole === 'Raja') {
-                this.playerRole = 'Raja';
-                this.playerRoleImage = 'raja';
-              } else if (currentRole === 'Chor') {
-                this.playerRole = 'Chor';
-                this.playerRoleImage = 'chor';
-              } else if (currentRole === 'Sipahi') {
-                this.playerRole = 'Sipahi';
-                this.playerRoleImage = 'sipahi';
-              } else if (currentRole === 'Mantri') {
-                this.playerRole = 'Mantri';
-                this.playerRoleImage = 'vajir';
-              }
-            }
-            clearInterval(readyTimer);
-          }
-        }
-        
+
       })
       .catch(err => {
         console.log(err);
-      })
+      });
+    const allReadyTimer = setInterval( async () => {
+      this.url = environment.baseUrl + '/all-ready?room_code=' + this.roomId;
+      await this.http.post(this.url, { title: 'ready player post request' }, { responseType: 'text' }).toPromise()
+        .then((res1) => {
+
+          this.result1 = res1;
+          console.log("interval " + this.result1 +"  -  " +  typeof this.result1);
+          if (this.result1 == true || this.result1 == 'true') {
+            clearInterval(allReadyTimer);
+
+            this.url1 = environment.baseUrl + '/toss-chits?room_code=' + this.roomId;
+            console.log("url1 " + this.url1);
+            this.http.post(this.url1, { title: 'ready player post request' }).toPromise()
+              .then((res2) => {
+                this.result2 = res2;
+                console.log("toss chits ", this.result2);
+                this.isReadyLoader = false;
+                this.isReady = true;
+                for (let i = 0; i < 4; i++) {
+                  if (this.result2.playerRoles[i].playerId == this.currentPlayerId) {
+                    let currentRole = this.result2.playerRoles[i].role;
+                    if (currentRole === 'Raja') {
+                      this.playerRole = 'Raja';
+                      this.playerRoleImage = 'raja';
+                    } else if (currentRole === 'Chor') {
+                      this.playerRole = 'Chor';
+                      this.playerRoleImage = 'chor';
+                    } else if (currentRole === 'Sipahi') {
+                      this.playerRole = 'Sipahi';
+                      this.playerRoleImage = 'sipahi';
+                    } else if (currentRole === 'Mantri') {
+                      this.playerRole = 'Mantri';
+                      this.playerRoleImage = 'vajir';
+                    }
+                  }
+                }
+                if(this.result2.success == true) {
+                  let url2 = environment.baseUrl + '/reset-ready?room_code=' + this.roomId;
+                  console.log("url2 " + url2);
+                  this.http.post(url2, { title: 'reset ready post request' }).toPromise()
+                  .then(() => {
+                    console.log("reset successfull");
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  })
+                }
+              })
+              .catch(err => {
+                console.log(err);
+              });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        })
 
     }, 3000);
-    
-      $('#player1').addClass('pulse-button');
+    $('#player1').addClass('pulse-button');
     $('#player2').addClass('pulse-button');
     $('#player3').addClass('pulse-button');
-    }
+  }
 
 }
