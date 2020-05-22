@@ -71,7 +71,7 @@ public class RoomController {
     }
 
     @CrossOrigin
-    @GetMapping("/all-ready")
+    @PostMapping("/all-ready")
     public BaseMessageResponse checkAllReady(@RequestParam("room_code") String roomCode) throws Exception {
         try {
             Boolean response = roomService.checkAllReady(roomCode);
