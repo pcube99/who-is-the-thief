@@ -219,7 +219,10 @@ public class RoomService {
     }
 
     public void resetReadyState(Room room) {
+        log.info("room{}",room);
+
         List<PlayerInfo> players = room.getPlayersInfo();
+        log.info("players{}",players);
         int i = 0;
         for (PlayerInfo player : players) {
 
@@ -228,7 +231,9 @@ public class RoomService {
             i++;
         }
         room.setPlayersInfo(players);
+        log.info("players{}",players);
         try {
+            log.info("tryRoom: {}",room);
             Room roomInDb = mongoTemplate.save(room, Constants.COLLECTION_ROOM_MODEL);
             log.info("[resetReadyState] Room updated in DB: {}", roomInDb);
         } catch (Exception e) {
