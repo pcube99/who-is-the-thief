@@ -178,7 +178,6 @@ public class RoomService {
         }
 
         Integer roundNo = roundModel.getRoundInfo().size();
-        resetReadyState(room);
 
         return TossChitsResponse.builder().roundNo(roundNo).playerRoles(playerRoles).success(true).build();
     }
@@ -204,11 +203,10 @@ public class RoomService {
         return true;
     }
 
-    public void resetReadyState(Room room) {
-        log.info("room{}",room);
+    public void resetReadyState(String roomId) throws Exception {
+        Room room = findRoom(roomId);
 
         List<PlayerInfo> players = room.getPlayersInfo();
-        log.info("players{}",players);
         int i = 0;
         for (PlayerInfo player : players) {
 
@@ -217,9 +215,7 @@ public class RoomService {
             i++;
         }
         room.setPlayersInfo(players);
-        log.info("players{}",players);
         try {
-            log.info("tryRoom: {}",room);
             Room roomInDb = mongoTemplate.save(room, Constants.COLLECTION_ROOM_MODEL);
             log.info("[resetReadyState] Room updated in DB: {}", roomInDb);
         } catch (Exception e) {

@@ -115,10 +115,22 @@ public class RoomController {
             throw e;
         }
     }
+
+    @CrossOrigin
+    @PostMapping("/reset-ready")
+    public void reset(@RequestParam("room_code") String roomCode) throws Exception {
+        try {
+            roomService.resetReadyState(roomCode);
+        } catch (Exception e) {
+            log.error("Failed in toss-chits endpoint, e - {}", e.getMessage());
+            throw e;
+        }
+    }
+
     @CrossOrigin
     @PostMapping("/evaluate-scores")
     public Object evaluateScores(@RequestParam("room_code") String roomCode, @RequestParam("player_id") String currentPlayerId, //@RequestParam("is_taking_risk") Boolean takeRisk,
                                  @RequestParam("choice") String selectedPlayerId) throws Exception {
-        return roomService.evaluateScores(roomCode,currentPlayerId,selectedPlayerId);
+        return roomService.evaluateScores(roomCode, currentPlayerId, selectedPlayerId);
     }
 }
