@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.management.ObjectName;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -73,6 +75,11 @@ public class RoomController {
     public BaseMessageResponse checkAllReady(@RequestParam("room_code") String roomCode) throws Exception {
         try {
             Boolean response = roomService.checkAllReady(roomCode);
+            Map<String, String> mp = new HashMap<>();
+            if(response)
+            mp.put("response","true");
+            else
+                mp.put("response","false");
             return new BaseMessageResponse(response);
         } catch (Exception e) {
             log.error("Failed in all-ready endpoint, e - {}", e.getMessage());
@@ -84,8 +91,13 @@ public class RoomController {
     @PostMapping("/update-status")
     public BaseMessageResponse updateStatus(@RequestParam("room_code") String roomCode, @RequestParam("player_id") String playerId) throws Exception {
         try {
-            Boolean flag = roomService.updateStatus(roomCode, playerId);
-            return new BaseMessageResponse(flag);
+            Boolean response = roomService.updateStatus(roomCode, playerId);
+            Map<String, String> mp = new HashMap<>();
+            if(response)
+                mp.put("response","true");
+            else
+                mp.put("response","false");
+            return new BaseMessageResponse(response);
         } catch (Exception e) {
             log.error("Failed in update-status endpoint, e - {}", e.getMessage());
             throw e;
