@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -123,35 +122,22 @@ public class RoomService {
         return list;
     }
 
-    @Async("asyncExecutor")
-    public TossChitsResponse checkAllReady(String roomCode, String playerId) throws Exception {
+    public Boolean checkAllReady(String roomCode) throws Exception {
         Room room = findRoom(roomCode);
         if (room == null) {
-            return TossChitsResponse.builder().success(false).build();
+            return false;
         }
         List<PlayerInfo> players = room.getPlayersInfo();
         if (players.size() < 4) {
-            return TossChitsResponse.builder().success(false).build();
+            return false;
         }
         boolean flag = true;
-        int i = 0;
         for (PlayerInfo player : players) {
-            if (player.getPlayerId().equals(playerId)) {
-                player.setIsReady(true);
-                players.set(i, player);
-            } else {
                 flag = flag & player.getIsReady();
-            }
-            i++;
         }
-        log.info("list: {}", players );
-        room.setPlayersInfo(players);
-        mongoTemplate.save(room);
+
         log.info("Returning flag : {}", flag);
-        if (flag) {
-            return tossChits(roomCode);
-        }
-        return TossChitsResponse.builder().success(false).build();
+        return flag;
     }
 
     public TossChitsResponse tossChits(String roomCode) throws Exception {

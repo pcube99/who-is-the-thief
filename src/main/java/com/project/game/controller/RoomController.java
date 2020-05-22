@@ -70,9 +70,9 @@ public class RoomController {
 
     @CrossOrigin
     @GetMapping("/all-ready")
-    public BaseMessageResponse checkAllReady(@RequestParam("room_code") String roomCode, @RequestParam("player_id") String playerId) throws Exception {
+    public BaseMessageResponse checkAllReady(@RequestParam("room_code") String roomCode) throws Exception {
         try {
-            TossChitsResponse response = roomService.checkAllReady(roomCode, playerId);
+            Boolean response = roomService.checkAllReady(roomCode);
             return new BaseMessageResponse(response);
         } catch (Exception e) {
             log.error("Failed in all-ready endpoint, e - {}", e.getMessage());
@@ -92,6 +92,17 @@ public class RoomController {
         }
     }
 
+    @CrossOrigin
+    @PostMapping("/toss-chits")
+    public BaseMessageResponse tossChits(@RequestParam("room_code") String roomCode) throws Exception {
+        try {
+            TossChitsResponse flag = roomService.tossChits(roomCode);
+            return new BaseMessageResponse(flag);
+        } catch (Exception e) {
+            log.error("Failed in toss-chits endpoint, e - {}", e.getMessage());
+            throw e;
+        }
+    }
     @CrossOrigin
     @PostMapping("/evaluate-scores")
     public Object evaluateScores(@RequestParam("room_code") String roomCode, @RequestParam("player_id") String currentPlayerId, //@RequestParam("is_taking_risk") Boolean takeRisk,
