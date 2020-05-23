@@ -1,5 +1,6 @@
 package com.project.game.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.game.constants.Constants;
 import com.project.game.models.pojos.PlayerInfo;
 import com.project.game.models.pojos.PlayerRole;
@@ -166,8 +167,18 @@ public class RoomService {
         List<String> roles = Arrays.asList(Constants.ROLES);
         Collections.shuffle(roles);
         RoundModel roundModel = findRoundModel(roomCode);
+        //1 :fill, 2: empty
         List<RoundInfo> roundInfoList = roundModel.getRoundInfo();
         List<PlayerRole> playerRoleList = roundInfoList.get(roundInfoList.size()-1).getPlayerRoleList();
+        //if no of rounds are 1 and no roles assigned than it is created by join room API
+        // else it is created by tossChits execution
+        for(PlayerRole p: playerRoleList)
+        {
+            if(p.getRole().equals("") && roundInfoList.size()!=1)
+            {
+                return TossChitsResponse.builder().success(true).playerRoles(playerRoleList).roundNo(roundInfoList.size()).build();
+            }
+        }
         int i=0;
         for(PlayerRole p: playerRoleList)
         {
@@ -175,48 +186,83 @@ public class RoomService {
             playerRoleList.set(i,p);
             i++;
         }
-        roundInfoList.set(roundInfoList.size()-1,RoundInfo.builder().playerRoleList(playerRoleList).build());
+        RoundInfo roundInfo = RoundInfo.builder().playerRoleList(playerRoleList).build();
+        roundInfoList.set(roundInfoList.size()-1,roundInfo);
         roundModel.setRoundInfo(roundInfoList);
+        System.out.println("Here1: " + roundModel.toString());
         try {
             roundModel = mongoTemplate.save(roundModel,Constants.COLLECTION_ROUND_MODEL);
-            log.info("[joinRoom] roundModel updated in DB: {}", roundModel);
+            log.info("[tossChits] roundModel updated in DB: {}", roundModel);
         } catch (Exception e) {
-            log.error("[joinRoom] mongodb update operation failed, e - {}", e.getMessage());
+            log.error("[tossChits] mongodb update operation failed, e - {}", e.getMessage());
             throw e;
         }
+        System.out.println("Here2: " + roundModel.toString());
         Integer roundNo = roundModel.getRoundInfo().size();
-        createRoundModel(roomCode);
+        System.out.println("Here3: " + roundNo);
+        createRoundModel(roundModel);
         return TossChitsResponse.builder().roundNo(roundNo).playerRoles(playerRoleList).success(true).build();
     }
 
-    public void createRoundModel(String roomCode)
+    public void createRoundModel(RoundModel roundModel)
     {
-        RoundModel roundModel = findRoundModel(roomCode);
         List<RoundInfo> roundInfoList = roundModel.getRoundInfo();
         List<PlayerRole> playerRoleList = roundInfoList.get(roundInfoList.size()-1).getPlayerRoleList();
+        for(RoundInfo r: roundInfoList)
+            System.out.println("pankil says: " + r.toString());
         for(PlayerRole p:playerRoleList)
         {
             if(p.getRole().equals(""))
-                return;
+                {
+                    System.out.println("I AM rreturninng");
+                    return;}
         }
+        System.out.println("I AM HERE");
         int i=0;
-        for(PlayerRole p: playerRoleList)
+        for(RoundInfo r: roundInfoList)
+            System.out.println("pankil-p says: " + r.toString());
+
+        List<Object> temp =  List.of(playerRoleList.toArray());
+        ObjectMapper mapper = new ObjectMapper();
+        List<PlayerRole> temp2 = new ArrayList<>();
+        for(Object o:temp)
+        {
+            temp2.add(mapper.convertValue(o,PlayerRole.class));
+        }
+        for(PlayerRole p: temp2)
         {
             p.setRole("");
             p.setRoundScore(0);
-            playerRoleList.set(i,p);
+            temp2.set(i,p);
             i++;
+            for(RoundInfo r: roundInfoList)
+                System.out.println("havya says: i: " + i + " and " + r.toString());
         }
-
+        for(RoundInfo roundInfo:roundInfoList)
+        {
+            System.out.println("Jai ho- pankil: " + roundInfo.toString());
+        }
         roundInfoList.add(RoundInfo.builder().playerRoleList(playerRoleList).build());
+        for(RoundInfo roundInfo:roundInfoList)
+        {
+            System.out.println("Jai ho: " + roundInfo.toString());
+        }
+        roundInfoList.set(roundInfoList.size()-1,RoundInfo.builder().playerRoleList(temp2).build());
         roundModel.setRoundInfo(roundInfoList);
+        for(RoundInfo roundInfo:roundInfoList)
+        {
+            System.out.println("Jai ho2: " + roundInfo.toString());
+        }
+        System.out.println("Here5: " + roundModel.toString())
+        ;
         try {
             roundModel = mongoTemplate.save(roundModel,Constants.COLLECTION_ROUND_MODEL);
-            log.info("[joinRoom] roundModel updated in DB: {}", roundModel);
+            log.info("[createRoundModel] roundModel updated in DB: {}", roundModel);
         } catch (Exception e) {
-            log.error("[joinRoom] mongodb update operation failed, e - {}", e.getMessage());
+            log.error("[createRoundModel] mongodb update operation failed, e - {}", e.getMessage());
             throw e;
         }
+        System.out.println("Here6: " + roundModel.toString());
         return;
     }
     public Boolean updateStatus(String roomCode, String playerId) throws Exception {
@@ -334,19 +380,19 @@ public class RoomService {
 
     public RoundModel findRoundModel(String roomCode)
     {
-        log.info("[findRoom] Request received for roomCode: {}", roomCode);
+        log.info("[findRoundModel] Request received for roomCode: {}", roomCode);
         Query query = new Query();
         query.addCriteria(Criteria.where(Constants.ROOM_CODE).is(roomCode));
         RoundModel roundModel;
         try {
             roundModel = mongoTemplate.findOne(query, RoundModel.class);
-            log.info("[findRoom] Room found in DB: {}", roundModel);
+            log.info("[findRoundModel] Room found in DB: {}", roundModel);
         } catch (Exception e) {
-            log.error("[findRoom] mongodb search operation failed, e - {}", e.getMessage());
+            log.error("[findRoundModel] mongodb search operation failed, e - {}", e.getMessage());
             throw e;
         }
         if (roundModel == null) {
-            log.error("[findRoom] No room found with code: {}", roomCode);
+            log.error("[findRoundModel] No room found with code: {}", roomCode);
             return new RoundModel();
         }
         return roundModel;
