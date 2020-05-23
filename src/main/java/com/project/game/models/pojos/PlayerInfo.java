@@ -24,6 +24,4 @@ public class PlayerInfo {
     @JsonProperty("profile_pic")
     @SerializedName("profile_pic")
     private String profilePic;
-    @JsonProperty("is_ready")
-    private Boolean isReady;
 }

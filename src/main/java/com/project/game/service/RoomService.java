@@ -81,7 +81,7 @@ public class RoomService {
         }
         if (room.getPlayersInfo().size() < 4) {
             String playerId = UUID.randomUUID().toString().substring(0, 4);
-            PlayerInfo newPlayer = PlayerInfo.builder().name(playerName).score(0).playerId(playerId).isReady(false).profilePic(profilePic).build();
+            PlayerInfo newPlayer = PlayerInfo.builder().name(playerName).score(0).playerId(playerId).profilePic(profilePic).build();
             room.getPlayersInfo().add(newPlayer);
             Room roomInDb;
             try {
@@ -123,20 +123,15 @@ public class RoomService {
     }
 
     public Boolean checkAllReady(String roomCode) throws Exception {
-        Room room = findRoom(roomCode);
-        if (room == null) {
-            return false;
-        }
-        List<PlayerInfo> players = room.getPlayersInfo();
-        if (players.size() < 4) {
-            return false;
-        }
+       RoundModel roundModel = findRoundModel(roomCode);
+        List<RoundInfo> roundInfoList = roundModel.getRoundInfo();
+        List<PlayerRole> playerRoleList = roundInfoList.get(roundInfoList.size()-1).getPlayerRoleList();
         boolean flag = true;
-        for (PlayerInfo player : players) {
-                flag = flag & player.getIsReady();
+        for(PlayerRole p: playerRoleList)
+        {
+            flag = flag && p.getIsReady();
         }
-
-        log.info("Returning flag : {}", flag);
+        log.info("Returning flag: {}", flag);
         return flag;
     }
 
@@ -183,45 +178,33 @@ public class RoomService {
     }
 
     public Boolean updateStatus(String roomCode, String playerId) throws Exception {
-        Room room = findRoom(roomCode);
-        if (room == null || room.getPlayersInfo().size() < 4) {
+       RoundModel roundModel = findRoundModel(roomCode);
+        if (roundModel == null) {
             return false;
         }
-        List<PlayerInfo> players = room.getPlayersInfo();
-        for (PlayerInfo player : players) {
-            if (player.getPlayerId().equals(playerId))
-                player.setIsReady(true);
-        }
-        room.setPlayersInfo(players);
+        List<RoundInfo> roundInfoList = roundModel.getRoundInfo();
+        List<PlayerRole> playerRoleList = roundInfoList.get(roundInfoList.size()-1).getPlayerRoleList();
+        int i=0;
+       for(PlayerRole playerRole: playerRoleList)
+       {
+           if(playerRole.getPlayerId().equals(playerId))
+           {
+               playerRole.setIsReady(true);
+               playerRoleList.set(i,playerRole);
+               break;
+           }
+           i++;
+       }
+       roundInfoList.get(roundInfoList.size()-1).setPlayerRoleList(playerRoleList);
+       roundModel.setRoundInfo(roundInfoList);
         try {
-            Room roomInDb = mongoTemplate.save(room);
-            log.info("[updateStatus] Room updated in DB: {}", roomInDb);
+            RoundModel roundModelInDb = mongoTemplate.save(roundModel);
+            log.info("[updateStatus] roundModel updated in DB: {}", roundModel);
         } catch (Exception e) {
             log.error("[updateStatus] mongodb update operation failed, e - {}", e.getMessage());
             throw e;
         }
         return true;
-    }
-
-    public void resetReadyState(String roomId) throws Exception {
-        Room room = findRoom(roomId);
-
-        List<PlayerInfo> players = room.getPlayersInfo();
-        int i = 0;
-        for (PlayerInfo player : players) {
-
-            player.setIsReady(false);
-            players.set(i, player);
-            i++;
-        }
-        room.setPlayersInfo(players);
-        try {
-            Room roomInDb = mongoTemplate.save(room, Constants.COLLECTION_ROOM_MODEL);
-            log.info("[resetReadyState] Room updated in DB: {}", roomInDb);
-        } catch (Exception e) {
-            log.error("[resetReadyState] mongodb update operation failed, e - {}", e.getMessage());
-            throw e;
-        }
     }
 
     public Object evaluateScores(String roomCode, String currentPlayerId, String selectedPlayerId) throws Exception {
@@ -305,5 +288,25 @@ public class RoomService {
             }
         }
         return null;
+    }
+
+    public RoundModel findRoundModel(String roomCode)
+    {
+        log.info("[findRoom] Request received for roomCode: {}", roomCode);
+        Query query = new Query();
+        query.addCriteria(Criteria.where(Constants.ROOM_CODE).is(roomCode));
+        RoundModel roundModel;
+        try {
+            roundModel = mongoTemplate.findOne(query, RoundModel.class);
+            log.info("[findRoom] Room found in DB: {}", roundModel);
+        } catch (Exception e) {
+            log.error("[findRoom] mongodb search operation failed, e - {}", e.getMessage());
+            throw e;
+        }
+        if (roundModel == null) {
+            log.error("[findRoom] No room found with code: {}", roomCode);
+            return new RoundModel();
+        }
+        return roundModel;
     }
 }
