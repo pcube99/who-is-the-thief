@@ -60,12 +60,20 @@ public class RoomService {
         String roomCode = UUID.randomUUID().toString().substring(0, 4);
         List<PlayerInfo> players = new ArrayList<>();
         Room room = Room.builder().roomName(roomName).roomCode(roomCode).playersInfo(players).build();
-        RoundModel roundModel = RoundModel.builder().roomCode(roomCode).roundInfo(Collections.emptyList()).build();
+        List<PlayerRole> playerRoleList = new ArrayList<>();
+        for(int i=0;i<4;i++)
+        {
+            playerRoleList.add(PlayerRole.builder().role("").playerId("").isReady(false).roundScore(0).build());
+        }
+        List<RoundInfo> roundInfoList = new ArrayList<>();
+        roundInfoList.add(RoundInfo.builder().playerRoleList(playerRoleList).build());
+        RoundModel roundModel = RoundModel.builder().roomCode(roomCode).roundInfo(roundInfoList).build();
         Room roomInDb;
         try {
             roomInDb = mongoTemplate.save(room);
             mongoTemplate.save(roundModel, "round_model");
             log.info("[createRoom] Room saved in DB: {}", roomInDb);
+            log.info("[createRoom] roundModel saved in DB: {}", roundModel);
         } catch (Exception e) {
             log.error("[createRoom] mongodb save operation failed, e - {}", e.getMessage());
             throw e;
@@ -83,10 +91,28 @@ public class RoomService {
             String playerId = UUID.randomUUID().toString().substring(0, 4);
             PlayerInfo newPlayer = PlayerInfo.builder().name(playerName).score(0).playerId(playerId).profilePic(profilePic).build();
             room.getPlayersInfo().add(newPlayer);
+            RoundModel roundModel = findRoundModel(roomCode);
+            List<RoundInfo> roundInfoList = roundModel.getRoundInfo();
+            List<PlayerRole> playerRoleList = roundInfoList.get(roundInfoList.size()-1).getPlayerRoleList();
+            int i=0;
+            for(PlayerRole p: playerRoleList)
+            {
+                if(p.getPlayerId().equals(""))
+                {
+                    p.setPlayerId(playerId);
+                    playerRoleList.set(i,p);
+                    break;
+                }
+                i++;
+            }
+            roundInfoList.add(RoundInfo.builder().playerRoleList(playerRoleList).build());
+            roundModel = RoundModel.builder().roomCode(roomCode).roundInfo(roundInfoList).build();
             Room roomInDb;
             try {
-                roomInDb = mongoTemplate.save(room);
+                roomInDb = mongoTemplate.save(room, Constants.COLLECTION_ROOM_MODEL);
+                roundModel = mongoTemplate.save(roundModel,Constants.COLLECTION_ROUND_MODEL);
                 log.info("[joinRoom] Room updated in DB: {}", roomInDb);
+                log.info("[joinRoom] roundModel updated in DB: {}", roundModel);
             } catch (Exception e) {
                 log.error("[joinRoom] mongodb update operation failed, e - {}", e.getMessage());
                 throw e;
