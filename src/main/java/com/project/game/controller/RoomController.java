@@ -116,16 +116,6 @@ public class RoomController {
         }
     }
 
-    @CrossOrigin
-    @PostMapping("/reset-ready")
-    public void reset(@RequestParam("room_code") String roomCode) throws Exception {
-        try {
-            roomService.resetReadyState(roomCode);
-        } catch (Exception e) {
-            log.error("Failed in toss-chits endpoint, e - {}", e.getMessage());
-            throw e;
-        }
-    }
 
     @CrossOrigin
     @PostMapping("/evaluate-scores")
