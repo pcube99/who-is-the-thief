@@ -165,44 +165,60 @@ public class RoomService {
         log.info("Request received to toss Cheats");
         List<String> roles = Arrays.asList(Constants.ROLES);
         Collections.shuffle(roles);
-        Query query = new Query();
-        query.addCriteria(Criteria.where(Constants.ROOM_CODE).is(roomCode));
-        RoundModel roundModel = mongoTemplate.findOne(query, RoundModel.class);
-        if (roundModel == null || roundModel.getRoundInfo() == null) {
-            return null;
-        }
-        Room room = findRoom(roomCode);
-
+        RoundModel roundModel = findRoundModel(roomCode);
         List<RoundInfo> roundInfoList = roundModel.getRoundInfo();
-        List<PlayerInfo> playerInfoList = room.getPlayersInfo();
-        List<PlayerRole> playerRoles = new ArrayList<>();
-        List<String> playerIds = new ArrayList<>();
-
-        for (PlayerInfo playerInfo : playerInfoList) {
-            playerIds.add(playerInfo.getPlayerId());
+        List<PlayerRole> playerRoleList = roundInfoList.get(roundInfoList.size()-1).getPlayerRoleList();
+        int i=0;
+        for(PlayerRole p: playerRoleList)
+        {
+            p.setRole(roles.get(i));
+            playerRoleList.set(i,p);
+            i++;
         }
-        for (int i = 0; i < playerInfoList.size(); i++) {
-            PlayerRole playerRole = PlayerRole.builder().playerId(playerIds.get(i)).role(roles.get(i)).build();
-            playerRoles.add(playerRole);
-        }
-
-        RoundInfo roundInfo = RoundInfo.builder().playerRoleList(playerRoles).build();
-        roundInfoList.add(roundInfo);
+        roundInfoList.set(roundInfoList.size()-1,RoundInfo.builder().playerRoleList(playerRoleList).build());
         roundModel.setRoundInfo(roundInfoList);
-
         try {
-            roundModel = mongoTemplate.save(roundModel, Constants.COLLECTION_ROUND_MODEL);
-            log.info("[tossChits] roundModel updated in DB: {}", roundModel);
+            roundModel = mongoTemplate.save(roundModel,Constants.COLLECTION_ROUND_MODEL);
+            log.info("[joinRoom] roundModel updated in DB: {}", roundModel);
         } catch (Exception e) {
-            log.error("[tossChits] mongodb update operation failed, e - {}", e.getMessage());
+            log.error("[joinRoom] mongodb update operation failed, e - {}", e.getMessage());
             throw e;
         }
-
         Integer roundNo = roundModel.getRoundInfo().size();
-
-        return TossChitsResponse.builder().roundNo(roundNo).playerRoles(playerRoles).success(true).build();
+        createRoundModel(roomCode);
+        return TossChitsResponse.builder().roundNo(roundNo).playerRoles(playerRoleList).success(true).build();
     }
 
+    public void createRoundModel(String roomCode)
+    {
+        RoundModel roundModel = findRoundModel(roomCode);
+        List<RoundInfo> roundInfoList = roundModel.getRoundInfo();
+        List<PlayerRole> playerRoleList = roundInfoList.get(roundInfoList.size()-1).getPlayerRoleList();
+        for(PlayerRole p:playerRoleList)
+        {
+            if(p.getRole().equals(""))
+                return;
+        }
+        int i=0;
+        for(PlayerRole p: playerRoleList)
+        {
+            p.setRole("");
+            p.setRoundScore(0);
+            playerRoleList.set(i,p);
+            i++;
+        }
+
+        roundInfoList.add(RoundInfo.builder().playerRoleList(playerRoleList).build());
+        roundModel.setRoundInfo(roundInfoList);
+        try {
+            roundModel = mongoTemplate.save(roundModel,Constants.COLLECTION_ROUND_MODEL);
+            log.info("[joinRoom] roundModel updated in DB: {}", roundModel);
+        } catch (Exception e) {
+            log.error("[joinRoom] mongodb update operation failed, e - {}", e.getMessage());
+            throw e;
+        }
+        return;
+    }
     public Boolean updateStatus(String roomCode, String playerId) throws Exception {
        RoundModel roundModel = findRoundModel(roomCode);
         if (roundModel == null) {
