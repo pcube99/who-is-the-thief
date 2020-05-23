@@ -70,8 +70,8 @@ public class RoomService {
         RoundModel roundModel = RoundModel.builder().roomCode(roomCode).roundInfo(roundInfoList).build();
         Room roomInDb;
         try {
-            roomInDb = mongoTemplate.save(room);
-            mongoTemplate.save(roundModel, "round_model");
+            roomInDb = mongoTemplate.save(room, Constants.COLLECTION_ROOM_MODEL);
+            mongoTemplate.save(roundModel, Constants.COLLECTION_ROUND_MODEL);
             log.info("[createRoom] Room saved in DB: {}", roomInDb);
             log.info("[createRoom] roundModel saved in DB: {}", roundModel);
         } catch (Exception e) {
@@ -105,8 +105,8 @@ public class RoomService {
                 }
                 i++;
             }
-            roundInfoList.add(RoundInfo.builder().playerRoleList(playerRoleList).build());
-            roundModel = RoundModel.builder().roomCode(roomCode).roundInfo(roundInfoList).build();
+            roundInfoList.set(roundInfoList.size()-1,RoundInfo.builder().playerRoleList(playerRoleList).build());
+            roundModel.setRoundInfo(roundInfoList);
             Room roomInDb;
             try {
                 roomInDb = mongoTemplate.save(room, Constants.COLLECTION_ROOM_MODEL);
