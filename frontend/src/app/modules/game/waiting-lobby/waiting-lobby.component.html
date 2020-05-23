@@ -3,6 +3,10 @@
         <div class="col s8 offset-s2 m8 offset-m2 l8 offset-l2 center-align">
         <img src="assets/images/waiting.gif" alt="waiting gif" class="responsive-img">
         <span id="waitingText">Waiting for others to join...</span>
+        <span> joined players..</span>
+        <div *ngFor="let player of players">
+            {{player.player_name}}
+        </div>
         </div>
     </div>
 </div>

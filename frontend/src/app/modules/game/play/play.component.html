@@ -1,14 +1,14 @@
 <app-loader *ngIf="loading && !waiting"></app-loader>
-<app-waiting-lobby *ngIf="waiting && !loading"></app-waiting-lobby>
+<app-waiting-lobby *ngIf="waiting && !loading" [players]="this.players"></app-waiting-lobby>
 <div class="container" *ngIf="!waiting && !loading">
   <!-- <button data-target="modal1" class="btn modal-trigger">Modal</button>
     <button data-target="modal2" class="btn modal-trigger">Modal2</button> -->
   <div class="row">
     <div class="col s6 offset-s3 m4 offset-m4 l4 offset-l4">
       <div id="player1" class="card-panel grey lighten-5 z-depth-1 valign-wrapper center-align"
-        (click)="choosenPlayer(1)">
-        <img *ngIf="this.result2 != null && this.result2.playerRoles[0].role == 'Raja'" src="assets/images/crown.png" class="circle responsive-img">
-        <img src='assets/images/128_{{this.players[0].profile_pic}}.png' alt="" class="circle responsive-img">
+        (click)="choosenPlayer(1, this.players[0].player_id)">
+        <img *ngIf="this.rajaPlayer != null && this.rajaPlayer == this.players[0].player_id" src="assets/images/crown.png" class="circle responsive-img">
+        <img *ngIf="this.rajaPlayer == null" src='assets/images/128_{{this.players[0].profile_pic}}.png' alt="" class="circle responsive-img">
         <span class="black-text">
           {{this.players[0].player_name}}
         </span>
@@ -17,9 +17,9 @@
 
     <div class="col s4 m4 l4">
       <div id="player2" class="card-panel grey lighten-5 z-depth-1 valign-wrapper center-align"
-        (click)="choosenPlayer(2)">
-        <img *ngIf="this.result2 != null && this.result2.playerRoles[1].role == 'Raja'" src="assets/images/crown.png" class="circle responsive-img">
-        <img src='assets/images/128_{{this.players[1].profile_pic}}.png' alt="" class="circle responsive-img">
+        (click)="choosenPlayer(2, this.players[1].player_id)">
+        <img *ngIf="this.rajaPlayer != null && this.rajaPlayer == this.players[1].player_id" src="assets/images/crown.png" class="circle responsive-img">
+        <img *ngIf="this.rajaPlayer == null" src='assets/images/128_{{this.players[1].profile_pic}}.png' alt="" class="circle responsive-img">
         <span class="black-text">
           {{this.players[1].player_name}}
         </span>
@@ -27,9 +27,9 @@
     </div>
     <div class="col s4 m4 l4">
       <div id="player3" class="card-panel grey lighten-5 z-depth-1 valign-wrapper center-align"
-        (click)="choosenPlayer(3)">
-        <img *ngIf="this.result2 != null && this.result2.playerRoles[2].role == 'Raja'" src="assets/images/crown.png" class="circle responsive-img">
-        <img src='assets/images/128_{{this.players[2].profile_pic}}.png' alt="" class="circle responsive-img">
+        (click)="choosenPlayer(3, this.players[2].player_id)">
+        <img *ngIf="this.rajaPlayer != null && this.rajaPlayer == this.players[2].player_id" src="assets/images/crown.png" class="circle responsive-img">
+        <img *ngIf="this.rajaPlayer == null" src='assets/images/128_{{this.players[2].profile_pic}}.png' alt="" class="circle responsive-img">
         <span class="black-text">
           {{this.players[2].player_name}}
         </span>

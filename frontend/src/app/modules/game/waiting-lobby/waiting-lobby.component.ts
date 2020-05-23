@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-waiting-lobby',
@@ -6,10 +6,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./waiting-lobby.component.css']
 })
 export class WaitingLobbyComponent implements OnInit {
-
+  @Input() players: any;
   constructor() { }
 
   ngOnInit(): void {
+    console.log(this.players);
   }
 
 }

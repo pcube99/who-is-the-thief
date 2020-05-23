@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import Swal from 'sweetalert2';
 import { Router, ActivatedRoute } from '@angular/router';
 declare let $: any;
@@ -19,6 +19,7 @@ export class PlayComponent implements OnInit {
   playerRole: any;
   selectedPlayer: any;
   error: any;
+  rajaPlayer: any;
   loading: any;
   url: any;
   roomId: any;
@@ -169,9 +170,10 @@ export class PlayComponent implements OnInit {
     }
   }
 
-  choosenPlayer(index) {
+  choosenPlayer(index, rajaId) {
     console.log(index);
-    if (this.selectedPlayer == undefined) {
+    if (this.selectedPlayer == undefined && rajaId != this.rajaPlayer) {
+      console.log(index);
       this.selectedPlayer = index;
       $('#player' + index).css('border', '2px solid black');
       $('#player1').removeClass('pulse-button');
@@ -228,6 +230,7 @@ export class PlayComponent implements OnInit {
                     }
                   }
                 }
+                this.findRaja();
                 if(this.result2.success == true) {
                   let url2 = environment.baseUrl + '/reset-ready?room_code=' + this.roomId;
                   console.log("url2 " + url2);
@@ -255,4 +258,13 @@ export class PlayComponent implements OnInit {
     $('#player3').addClass('pulse-button');
   }
 
+  findRaja() {
+    for(let player of this.result2.playerRoles) {
+      console.log(player);
+      if(player.role == 'Raja') {
+        this.rajaPlayer = player.playerId;
+        console.log("raja found " + this.rajaPlayer);
+      }
+    }
+  }
 }
