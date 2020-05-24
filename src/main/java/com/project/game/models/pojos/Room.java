@@ -29,7 +29,8 @@ public class Room {
     private String roomName = "";
     @JsonProperty("player_info")
     private List<PlayerInfo> playersInfo = new ArrayList<>();
-
+    @JsonProperty("no_of_rounds")
+    private int noOfRounds;
 }
 
 

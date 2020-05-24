@@ -55,7 +55,7 @@ public class RoomService {
         log.info("[createRoom] : Request received to create room with roomName: {} and noOfRounds : {}", roomName, noOfRounds);
         String roomCode = UUID.randomUUID().toString().substring(0, 4);
         List<PlayerInfo> players = new ArrayList<>();
-        Room room = Room.builder().roomName(roomName).roomCode(roomCode).playersInfo(players).build();
+        Room room = Room.builder().roomName(roomName).roomCode(roomCode).playersInfo(players).noOfRounds(noOfRounds).build();
         Room roomInDb;
         try {
             roomInDb = mongoTemplate.save(room, Constants.COLLECTION_ROOM_MODEL);
@@ -68,7 +68,7 @@ public class RoomService {
         return roomInDb;
     }
 
-    public String joinRoom(String roomCode, String playerName, String profilePic, int noOfRounds) throws Exception {
+    public String joinRoom(String roomCode, String playerName, String profilePic) throws Exception {
         log.info("[joinRoom] Request received to join room: {} from playerName: {}", roomCode, playerName);
         Room room = findRoom(roomCode);
         RoundModel roundModel = findRoundModel(roomCode);
@@ -90,7 +90,7 @@ public class RoomService {
             if(room.getPlayersInfo().size() == 4)
             {
                 log.info("calling createAllRoundsInDb: {}",roomInDb);
-                createAllRoundsInDb(roomCode,noOfRounds);
+                createAllRoundsInDb(roomCode,room.getNoOfRounds());
             }
             return playerId;
         }

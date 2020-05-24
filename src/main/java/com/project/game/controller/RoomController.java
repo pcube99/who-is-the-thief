@@ -57,9 +57,9 @@ public class RoomController {
 
     @CrossOrigin
     @GetMapping
-    public BaseMessageResponse joinRoom(@RequestParam("room_code") String roomCode, @RequestParam("player_name") String playerName, @RequestParam("profile_pic") String profilePic, @RequestParam("no_of_round") int noOfRounds) throws Exception {
+    public BaseMessageResponse joinRoom(@RequestParam("room_code") String roomCode, @RequestParam("player_name") String playerName, @RequestParam("profile_pic") String profilePic) throws Exception {
         try {
-            String playerId = roomService.joinRoom(roomCode, playerName, profilePic, noOfRounds);
+            String playerId = roomService.joinRoom(roomCode, playerName, profilePic);
             return new BaseMessageResponse(playerId);
         } catch (Exception e) {
             log.error("Failed in join-room endpoint, e - {}", e.getMessage());
