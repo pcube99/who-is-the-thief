@@ -1,7 +1,6 @@
 package com.project.game.controller;
 
 import com.project.game.models.response.BaseMessageResponse;
-import com.project.game.models.pojos.PlayerInfo;
 import com.project.game.models.pojos.Room;
 import com.project.game.models.response.TossChitsResponse;
 import com.project.game.service.RoomService;
@@ -15,9 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.management.ObjectName;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -50,7 +47,7 @@ public class RoomController {
     @PostMapping
     public BaseMessageResponse createRoom(@RequestParam("room_name") String roomName, @RequestParam("rounds") Integer noOfRounds) throws Exception {
         try {
-            Room room = roomService.createRoom(roomName, noOfRounds);
+            Room room = roomService.createRoomAndAllRounds(roomName, noOfRounds);
             return new BaseMessageResponse(room);
         } catch (Exception e) {
             log.error("Failed in create room endpoint, e - {}", e.getMessage());
@@ -60,9 +57,9 @@ public class RoomController {
 
     @CrossOrigin
     @GetMapping
-    public BaseMessageResponse joinRoom(@RequestParam("room_code") String roomCode, @RequestParam("player_name") String playerName, @RequestParam("profile_pic") String profilePic) throws Exception {
+    public BaseMessageResponse joinRoom(@RequestParam("room_code") String roomCode, @RequestParam("player_name") String playerName, @RequestParam("profile_pic") String profilePic, @RequestParam("no_of_round") int noOfRounds) throws Exception {
         try {
-            String playerId = roomService.joinRoom(roomCode, playerName, profilePic);
+            String playerId = roomService.joinRoom(roomCode, playerName, profilePic, noOfRounds);
             return new BaseMessageResponse(playerId);
         } catch (Exception e) {
             log.error("Failed in join-room endpoint, e - {}", e.getMessage());
@@ -72,9 +69,9 @@ public class RoomController {
 
     @CrossOrigin
     @PostMapping("/all-ready")
-    public BaseMessageResponse checkAllReady(@RequestParam("room_code") String roomCode) throws Exception {
+    public BaseMessageResponse checkAllReady(@RequestParam("room_code") String roomCode, @RequestParam("round_no") int roundNo) throws Exception {
         try {
-            Boolean response = roomService.checkAllReady(roomCode);
+            Boolean response = roomService.checkAllReady(roomCode, roundNo);
             Map<String, String> mp = new HashMap<>();
             if(response)
             mp.put("response","true");
@@ -89,9 +86,9 @@ public class RoomController {
 
     @CrossOrigin
     @PostMapping("/update-status")
-    public BaseMessageResponse updateStatus(@RequestParam("room_code") String roomCode, @RequestParam("player_id") String playerId) throws Exception {
+    public BaseMessageResponse updateStatus(@RequestParam("room_code") String roomCode, @RequestParam("player_id") String playerId, @RequestParam("round_no") int roundNo) throws Exception {
         try {
-            Boolean response = roomService.updateStatus(roomCode, playerId);
+            Boolean response = roomService.updateStatus(roomCode, playerId, roundNo);
             Map<String, String> mp = new HashMap<>();
             if(response)
                 mp.put("response","true");
@@ -105,10 +102,10 @@ public class RoomController {
     }
 
     @CrossOrigin
-    @PostMapping("/toss-chits")
-    public BaseMessageResponse tossChits(@RequestParam("room_code") String roomCode) throws Exception {
+    @GetMapping("/toss-chits")
+    public BaseMessageResponse tossChits(@RequestParam("room_code") String roomCode, @RequestParam("round_no") int roundNo) throws Exception {
         try {
-            TossChitsResponse flag = roomService.tossChits(roomCode);
+            TossChitsResponse flag = roomService.tossChits(roomCode,roundNo);
             return new BaseMessageResponse(flag);
         } catch (Exception e) {
             log.error("Failed in toss-chits endpoint, e - {}", e.getMessage());
@@ -119,8 +116,8 @@ public class RoomController {
 
     @CrossOrigin
     @PostMapping("/evaluate-scores")
-    public Object evaluateScores(@RequestParam("room_code") String roomCode, @RequestParam("player_id") String currentPlayerId, //@RequestParam("is_taking_risk") Boolean takeRisk,
+    public Object evaluateScores(@RequestParam("room_code") String roomCode, @RequestParam("player_id") String currentPlayerId,@RequestParam("round_no") int roundNo,
                                  @RequestParam("choice") String selectedPlayerId) throws Exception {
-        return roomService.evaluateScores(roomCode, currentPlayerId, selectedPlayerId);
+        return roomService.evaluateScores(roomCode, currentPlayerId, selectedPlayerId, roundNo);
     }
 }
