@@ -30,6 +30,7 @@ export class CreateRoomComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    localStorage.setItem("roundNo", "0");
     this.loading = false;
     this.submitted = false;
     this.shareLink = 'You have been invited to play *Who is the thief?* \n \n' +

@@ -32,6 +32,7 @@ export class PlayComponent implements OnInit {
   result1: any;
   result2: any;
   url1: any;
+  roundNo: any;
   constructor(
     private router: Router,
     private http: HttpClient,
@@ -78,7 +79,6 @@ export class PlayComponent implements OnInit {
 
   async getRoomInfo() {
     this.loading = true;
-    // this.roomId = '6458';
     console.log(' this.roomId ' + this.roomId);
     this.url = environment.baseUrl + '/' + this.roomId;
     await this.http.get(this.url).toPromise()
@@ -148,31 +148,9 @@ export class PlayComponent implements OnInit {
     this.router.navigate(['app/home']);
   }
 
-  // TODO assign it to a variable
-  tossCheats() {
-    // this.playerStatus();
-    // const roles = ['Raja', 'Chor', 'Sipahi', 'Mantri'];
-    // this.playerRoles = _.sampleSize(roles, 4);
-    // console.log('this.playerRoles[3] ' + this.playerRoles[3] + ' ' + this.playerRoles);
-
-    if (this.playerRoles[3] === 'Raja') {
-      this.playerRole = 'Raja';
-      this.playerRoleImage = 'raja';
-    } else if (this.playerRoles[3] === 'Chor') {
-      this.playerRole = 'Chor';
-      this.playerRoleImage = 'chor';
-    } else if (this.playerRoles[3] === 'Sipahi') {
-      this.playerRole = 'Sipahi';
-      this.playerRoleImage = 'sipahi';
-    } else if (this.playerRoles[3] === 'Mantri') {
-      this.playerRole = 'Mantri';
-      this.playerRoleImage = 'vajir';
-    }
-  }
-
-  choosenPlayer(index, rajaId) {
+  async choosenPlayer(index, selectedId) {
     console.log(index);
-    if (this.selectedPlayer == undefined && rajaId != this.rajaPlayer) {
+    if (this.selectedPlayer == undefined && selectedId != this.rajaPlayer) {
       console.log(index);
       this.selectedPlayer = index;
       $('#player' + index).css('border', '2px solid black');
@@ -180,11 +158,22 @@ export class PlayComponent implements OnInit {
       $('#player2').removeClass('pulse-button');
       $('#player3').removeClass('pulse-button');
     }
+    let url = environment.baseUrl + '/evaluate-scores?room_code=' + this.roomId + '&player_id=' + this.currentPlayerId+"&round_no="+this.roundNo+"&choice="+selectedId;
+    console.log("evaluate url", url);
+    await this.http.post(url, { title: 'ready player post request' }, { responseType: 'text' }).toPromise()
+      .then()
+      .catch((err) => {
+        console.log(err);
+      });
+      this.roundNo = this.roundNo + 1;
+
   }
 
   async readyPlayer() {
+    this.roundNo = parseInt(localStorage.getItem("roundNo"), 10);
+    console.log("this.roundno " + this.roundNo);
     console.log(' this.roomId ' + this.roomId + " " + this.currentPlayerId);
-    this.url = environment.baseUrl + '/update-status?room_code=' + this.roomId + '&player_id=' + this.currentPlayerId;
+    this.url = environment.baseUrl + '/update-status?room_code=' + this.roomId + '&player_id=' + this.currentPlayerId+"&round_no="+this.roundNo;
     await this.http.post(this.url, { title: 'ready player post request' }, { responseType: 'text' }).toPromise()
       .then((res) => {
         console.log("ready response" + res);
@@ -195,7 +184,7 @@ export class PlayComponent implements OnInit {
         console.log(err);
       });
     const allReadyTimer = setInterval( async () => {
-      this.url = environment.baseUrl + '/all-ready?room_code=' + this.roomId;
+      this.url = environment.baseUrl + '/all-ready?room_code=' + this.roomId+"&round_no="+this.roundNo;
       await this.http.post(this.url, { title: 'ready player post request' }, { responseType: 'text' }).toPromise()
         .then((res1) => {
 
@@ -204,10 +193,11 @@ export class PlayComponent implements OnInit {
           if (this.result1 == true || this.result1 == 'true') {
             clearInterval(allReadyTimer);
 
-            this.url1 = environment.baseUrl + '/toss-chits?room_code=' + this.roomId;
+            this.url1 = environment.baseUrl + '/toss-chits?room_code=' + this.roomId+"&round_no="+this.roundNo;
             console.log("url1 " + this.url1);
-            this.http.post(this.url1, { title: 'ready player post request' }).toPromise()
+            this.http.get(this.url1).toPromise()
               .then((res2) => {
+                localStorage.setItem("roundNo", this.roundNo.toString());
                 this.result2 = res2;
                 console.log("toss chits ", this.result2);
                 this.isReadyLoader = false;
@@ -224,24 +214,13 @@ export class PlayComponent implements OnInit {
                     } else if (currentRole === 'Sipahi') {
                       this.playerRole = 'Sipahi';
                       this.playerRoleImage = 'sipahi';
-                    } else if (currentRole === 'Mantri') {
-                      this.playerRole = 'Mantri';
+                    } else if (currentRole === 'Wazir') {
+                      this.playerRole = 'Wazir';
                       this.playerRoleImage = 'vajir';
                     }
                   }
                 }
                 this.findRaja();
-                if(this.result2.success == true) {
-                  let url2 = environment.baseUrl + '/reset-ready?room_code=' + this.roomId;
-                  console.log("url2 " + url2);
-                  this.http.post(url2, { title: 'reset ready post request' }).toPromise()
-                  .then(() => {
-                    console.log("reset successfull");
-                  })
-                  .catch((err) => {
-                    console.log(err);
-                  })
-                }
               })
               .catch(err => {
                 console.log(err);

@@ -42,6 +42,7 @@ export class JoinRoomComponent implements OnInit {
       $('.carousel').carousel();
     });
     this.createForm();
+    localStorage.setItem("roundNo", "0");
   }
 
   selectProfilePic(i) {

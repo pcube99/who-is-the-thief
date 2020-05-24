@@ -8,7 +8,7 @@
       <div id="player1" class="card-panel grey lighten-5 z-depth-1 valign-wrapper center-align"
         (click)="choosenPlayer(1, this.players[0].player_id)">
         <img *ngIf="this.rajaPlayer != null && this.rajaPlayer == this.players[0].player_id" src="assets/images/crown.png" class="circle responsive-img">
-        <img *ngIf="this.rajaPlayer == null" src='assets/images/128_{{this.players[0].profile_pic}}.png' alt="" class="circle responsive-img">
+        <img *ngIf="this.rajaPlayer != this.players[0].player_id" src='assets/images/128_{{this.players[0].profile_pic}}.png' alt="" class="circle responsive-img">
         <span class="black-text">
           {{this.players[0].player_name}}
         </span>
@@ -19,7 +19,7 @@
       <div id="player2" class="card-panel grey lighten-5 z-depth-1 valign-wrapper center-align"
         (click)="choosenPlayer(2, this.players[1].player_id)">
         <img *ngIf="this.rajaPlayer != null && this.rajaPlayer == this.players[1].player_id" src="assets/images/crown.png" class="circle responsive-img">
-        <img *ngIf="this.rajaPlayer == null" src='assets/images/128_{{this.players[1].profile_pic}}.png' alt="" class="circle responsive-img">
+        <img *ngIf="this.rajaPlayer != this.players[1].player_id" src='assets/images/128_{{this.players[1].profile_pic}}.png' alt="" class="circle responsive-img">
         <span class="black-text">
           {{this.players[1].player_name}}
         </span>
@@ -29,7 +29,7 @@
       <div id="player3" class="card-panel grey lighten-5 z-depth-1 valign-wrapper center-align"
         (click)="choosenPlayer(3, this.players[2].player_id)">
         <img *ngIf="this.rajaPlayer != null && this.rajaPlayer == this.players[2].player_id" src="assets/images/crown.png" class="circle responsive-img">
-        <img *ngIf="this.rajaPlayer == null" src='assets/images/128_{{this.players[2].profile_pic}}.png' alt="" class="circle responsive-img">
+        <img *ngIf="this.rajaPlayer != this.players[2].player_id" src='assets/images/128_{{this.players[2].profile_pic}}.png' alt="" class="circle responsive-img">
         <span class="black-text">
           {{this.players[2].player_name}}
         </span>
